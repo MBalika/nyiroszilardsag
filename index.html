@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohr-kör — Interaktív segédanyag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#eef3f1; --card:#f9fbfa; --grid:rgba(13,90,80,0.055); --line:#d3dedb;
+  --ink:#0d272b; --ink2:#34514f; --ink3:#64807d;
+  --accent:#0e7c6b; --accent-soft:#dcefe9;
+  --water:#1b6fae; --water-soft:#ddeaf6;
+  --pore:#c2521f; --pore-soft:#f7e2d5;   /* nyírófeszültség τ */
+  --eff:#7a5230; --eff-soft:#efe4d7;      /* normálfeszültség σ */
+  --danger:#a32626; --danger-soft:#f7e3e3;
+  --ok:#2e7d4f;
+  --display:'Archivo',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.7}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;}
+main{position:relative;z-index:1}
+nav{position:sticky;top:0;z-index:300;height:54px;background:rgba(238,243,241,0.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 1.4rem;gap:1.6rem;}
+.nav-logo{font-family:var(--display);font-weight:800;font-size:14px;letter-spacing:.06em;color:var(--accent);white-space:nowrap;text-transform:uppercase}
+.nav-links{display:flex;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:0 12px;height:54px;display:flex;align-items:center;font-size:13.5px;font-weight:500;color:var(--ink3);text-decoration:none;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;}
+.nav-link:hover{color:var(--ink)}
+.nav-link.active{color:var(--accent);border-bottom-color:var(--accent)}
+header.hero{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:4.5rem 1.5rem 3rem;}
+.hero-eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+.hero h1{font-family:var(--display);font-weight:900;letter-spacing:-0.015em;font-size:clamp(2.6rem,7vw,4.6rem);line-height:1.02;color:var(--ink);text-transform:uppercase;}
+.hero h1 .thin{font-weight:600;color:var(--ink3)}
+.hero-sub{max-width:640px;margin-top:1.3rem;font-size:1.06rem;color:var(--ink2)}
+.hero-fig{margin-top:2.2rem;max-width:640px;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:1rem 1.2rem;display:flex;gap:1.1rem;align-items:center}
+.hero-fig svg{flex:none}
+.hero-fig .cap{font-size:12.5px;color:var(--ink3)}
+section{max-width:980px;margin:0 auto;padding:3.2rem 1.5rem 1rem}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem;}
+.eyebrow::after{content:'';height:1px;flex:1;background:var(--line)}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,3.4vw,2.1rem);letter-spacing:-.01em;margin-bottom:1rem}
+h3{font-family:var(--display);font-weight:700;font-size:1.12rem;margin:1.6rem 0 .5rem}
+p{margin-bottom:1rem;color:var(--ink2)}
+p strong{color:var(--ink)}
+.lead{font-size:1.05rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.4rem 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.2rem}
+.card h4{font-family:var(--display);font-weight:700;font-size:.98rem;margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem}
+.card p{font-size:.92rem;margin:0;color:var(--ink2)}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.dot.sig{background:var(--eff)} .dot.tau{background:var(--pore)} .dot.env{background:var(--water)} .dot.accent{background:var(--accent)} .dot.danger{background:var(--danger)}
+.formula{font-family:var(--mono);background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:.9rem 1.2rem;margin:1.2rem 0;font-size:.98rem;overflow-x:auto;white-space:nowrap;}
+.formula small{display:block;font-family:var(--body);color:var(--ink3);font-size:.82rem;white-space:normal;margin-top:.4rem}
+.f-sig{color:var(--eff);font-weight:600} .f-tau{color:var(--pore);font-weight:600} .f-env{color:var(--water);font-weight:600} .f-acc{color:var(--accent);font-weight:600}
+.note{background:var(--accent-soft);border:1px solid #bcdcd2;border-radius:10px;padding:.9rem 1.2rem;margin:1.2rem 0;font-size:.95rem;color:var(--ink2);}
+.note strong{color:var(--accent)}
+.note.warn{background:var(--pore-soft);border-color:#e7c4ab}
+.note.warn strong{color:var(--pore)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.4rem;margin:1.6rem 0;box-shadow:0 2px 14px rgba(13,39,43,0.05);}
+.panel-title{font-family:var(--display);font-weight:700;font-size:1.02rem;margin-bottom:.2rem}
+.panel-sub{font-size:.88rem;color:var(--ink3);margin-bottom:1rem}
+.controls{display:flex;flex-wrap:wrap;gap:1rem 1.6rem;align-items:flex-end;margin-bottom:1rem}
+.ctrl{display:flex;flex-direction:column;gap:.3rem;min-width:150px;flex:1}
+.ctrl label{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3)}
+.ctrl .val{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--accent);height:26px}
+select{font-family:var(--mono);font-size:14px;padding:.45rem .6rem;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:100%;}
+.btn{font-family:var(--display);font-weight:700;font-size:.9rem;letter-spacing:.02em;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;transition:transform .1s,opacity .2s;}
+.btn:hover{opacity:.92}.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{font-size:.8rem;padding:.4rem .7rem}
+.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--water);outline-offset:2px}
+.btn-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.svg-wrap{background:#fff;border:1px solid var(--line);border-radius:10px;padding:.6rem;overflow:hidden}
+.svg-wrap svg{display:block;width:100%;height:auto}
+.split{display:grid;grid-template-columns:1.15fr .85fr;gap:1.2rem;align-items:start}
+@media(max-width:760px){.split{grid-template-columns:1fr}}
+.readouts{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.chip{font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:.45rem .7rem;color:var(--ink2);}
+.chip b{color:var(--ink);font-weight:600}
+.chip.tau b{color:var(--pore)} .chip.sig b{color:var(--eff)} .chip.acc b{color:var(--accent)} .chip.env b{color:var(--water)}
+.statusbar{margin-top:1rem;border-radius:10px;padding:.7rem 1rem;font-family:var(--display);font-weight:700;font-size:1rem;text-align:center;border:1px solid var(--line);transition:background .2s,color .2s}
+.statusbar.safe{background:var(--accent-soft);color:var(--ok);border-color:#bcdcd2}
+.statusbar.fail{background:var(--danger-soft);color:var(--danger);border-color:#e7bcbc}
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.93rem;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:.55rem .9rem;border-bottom:1px solid var(--line);text-align:center;font-family:var(--mono);font-size:.88rem}
+th{background:var(--accent-soft);color:var(--ink);font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.03em}
+tr:last-child td{border-bottom:none}
+.quiz-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.6rem;margin:1.6rem 0}
+.quiz-progress{font-family:var(--mono);font-size:12.5px;color:var(--ink3);margin-bottom:.8rem;display:flex;justify-content:space-between}
+.quiz-q{font-family:var(--display);font-weight:700;font-size:1.12rem;margin-bottom:1.1rem}
+.quiz-opts{display:grid;gap:.6rem}
+.quiz-opt{text-align:left;font-family:var(--body);font-size:.96rem;padding:.75rem 1rem;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;color:var(--ink2);transition:border-color .15s,background .15s;}
+.quiz-opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+.quiz-opt:disabled{cursor:default}
+.quiz-opt.correct{border-color:var(--ok);background:#e2f1e8;color:var(--ink);font-weight:600}
+.quiz-opt.wrong{border-color:var(--danger);background:#f7e3e3;color:var(--ink)}
+.quiz-expl{margin-top:1rem;padding:.9rem 1.1rem;border-radius:10px;background:var(--water-soft);border:1px solid #bcd4ea;font-size:.93rem;color:var(--ink2);display:none}
+.quiz-expl.show{display:block}.quiz-expl b{color:var(--water)}
+.quiz-next{margin-top:1.1rem;display:none}.quiz-next.show{display:inline-block}
+.quiz-result{text-align:center;display:none}.quiz-result.show{display:block}
+.quiz-score{font-family:var(--display);font-weight:900;font-size:3.4rem;color:var(--accent);line-height:1.1}
+.quiz-msg{font-size:1.02rem;color:var(--ink2);margin:.6rem 0 1.4rem}
+.progress-track{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-bottom:1.2rem}
+.progress-fill{height:100%;background:var(--accent);width:0;transition:width .3s}
+footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--ink3);font-family:var(--mono);}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@keyframes shearOsc{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--sx),var(--sy))}}
+.slip{animation:shearOsc 1.1s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.slip{animation:none}}
+@media(max-width:600px){section{padding:2.4rem 1.1rem .6rem}header.hero{padding:3rem 1.1rem 2rem}nav{padding:0 .9rem;gap:.9rem}.hero-fig{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">Mohr-kör</span>
+  <div class="nav-links">
+    <a class="nav-link" href="#alapok">Feszültségállapot</a>
+    <a class="nav-link" href="#kor">Mohr-kör</a>
+    <a class="nav-link" href="#tores">Törés</a>
+    <a class="nav-link" href="#esetek">Nyírószilárdság</a>
+    <a class="nav-link" href="#kviz">Kvíz</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">Talajmechanika · Interaktív segédanyag</div>
+  <h1>Mohr-kör<br><span class="thin">— amíg a talaj el nem törik</span></h1>
+  <p class="hero-sub">Egy talajelemben minden síkon más a <strong>normál-</strong> és a <strong>nyírófeszültség</strong>. A Mohr-kör ezt az egész feszültségállapotot egyetlen körré sűríti — és ha a kör eléri a <strong>törési burkológörbét</strong>, a talaj megnyíródik. Állítsd a csúszókat, és nézd élőben.</p>
+  <div class="hero-fig">
+    <svg id="heroSvg" viewBox="0 0 190 150" width="190" height="150" role="img" aria-label="Növekvő Mohr-kör, amely eléri a törési egyenest"></svg>
+    <div class="cap">A kör <b style="color:var(--accent)">nő</b> a teher növekedésével — amint érinti a <b style="color:var(--water)">burkológörbét</b>, a minta <b style="color:var(--danger)">törik</b>. Aztán elölről.</div>
+  </div>
+</header>
+
+<main>
+
+<!-- ── 1. FESZÜLTSÉGÁLLAPOT ── -->
+<section id="alapok" class="reveal">
+  <div class="eyebrow">1 · Alapfogalmak</div>
+  <h2>Feszültség egy síkon</h2>
+  <p class="lead">Ha a talajban egy képzeletbeli síkot veszünk fel, a rá ható feszültséget két részre bontjuk: a síkra <strong>merőleges normálfeszültségre (σ)</strong> és a síkkal <strong>párhuzamos nyírófeszültségre (τ)</strong>. A talaj törését szinte mindig a <strong>nyírás</strong> okozza — a szemcsék egymáson elcsúsznak.</p>
+  <div class="cards">
+    <div class="card"><h4><span class="dot sig"></span>Normálfeszültség σ</h4><p>A síkra merőleges összenyomó feszültség. Növeli a szemcsék közti súrlódást — <em>segít</em> ellenállni a nyírásnak.</p></div>
+    <div class="card"><h4><span class="dot tau"></span>Nyírófeszültség τ</h4><p>A síkkal párhuzamos, elcsúsztató feszültség. Ez <em>hajtja</em> a törést. Amikor τ túl nagy lesz σ-hoz képest, a talaj megnyíródik.</p></div>
+    <div class="card"><h4><span class="dot accent"></span>Főfeszültségek σ₁, σ₃</h4><p>Mindig van két egymásra merőleges sík, amelyen a nyírás zérus — ezeken hat a legnagyobb (σ₁) és a legkisebb (σ₃) normálfeszültség. Köztük forog minden más sík.</p></div>
+  </div>
+  <div class="formula">σ<sub>n</sub> = <span class="f-sig">(σ₁+σ₃)/2</span> + <span class="f-sig">(σ₁−σ₃)/2</span>·cos2θ &nbsp;&nbsp; τ = <span class="f-tau">(σ₁−σ₃)/2</span>·sin2θ
+    <small>A θ síkszöggel a feszültségek <strong>periodikusan</strong> változnak — pont ezt rajzolja ki egy kör a σ–τ síkon. A kör <strong>középpontja</strong> (σ₁+σ₃)/2, a <strong>sugara</strong> (σ₁−σ₃)/2.</small>
+  </div>
+  <div class="note"><strong>A kulcsgondolat:</strong> a teljes feszültségállapotot — végtelen sok sík minden σ–τ párját — egyetlen kör tartalmazza. A talajmechanika fél sikere ennek a körnek a megértése.</div>
+</section>
+
+<!-- ── 2. MOHR-KÖR JÁTSZÓTÉR ── -->
+<section id="kor" class="reveal">
+  <div class="eyebrow">2 · A kör születése</div>
+  <h2>Mohr-kör játszótér</h2>
+  <p class="lead">Állítsd a két <strong>főfeszültséget</strong> (σ₁, σ₃), és forgasd a <strong>vizsgált síkot</strong> (θ). A jobb oldali elemen a sík és a rá ható σ<sub>n</sub>, τ feszültségek; a bal oldali körön a megfelelő <strong>pont</strong> — a kettő együtt mozog.</p>
+  <div class="panel">
+    <div class="panel-title">Élő Mohr-kör</div>
+    <div class="panel-sub">A körön a piros pont a kiválasztott sík feszültségállapota. A síkszög θ-ja a körön <strong>2θ</strong>-ként jelenik meg.</div>
+    <div class="controls">
+      <div class="ctrl"><label>σ₁ — nagyobb főfeszültség <span class="val" id="k_s1v">240 kPa</span></label><input type="range" id="k_s1" min="40" max="400" step="5" value="240"></div>
+      <div class="ctrl"><label>σ₃ — kisebb főfeszültség <span class="val" id="k_s3v">80 kPa</span></label><input type="range" id="k_s3" min="0" max="400" step="5" value="80"></div>
+      <div class="ctrl"><label>θ — sík szöge <span class="val" id="k_thv">30°</span></label><input type="range" id="k_th" min="0" max="90" step="1" value="30"></div>
+    </div>
+    <div class="split">
+      <div class="svg-wrap"><svg id="korSvg" viewBox="0 0 440 380" role="img" aria-label="Mohr-kör a σ-τ síkon"></svg></div>
+      <div>
+        <div class="svg-wrap"><svg id="elemSvg" viewBox="0 0 240 240" role="img" aria-label="Talajelem a vizsgált síkkal"></svg></div>
+        <div class="readouts">
+          <div class="chip sig">σ<sub>n</sub> <b id="k_sn">—</b></div>
+          <div class="chip tau">τ <b id="k_tau">—</b></div>
+          <div class="chip acc">közép <b id="k_c">—</b></div>
+          <div class="chip">sugár R <b id="k_r">—</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note"><strong>Figyeld meg:</strong> ha θ = 0°, a sík a főfeszültség síkja → τ = 0, σ<sub>n</sub> = σ₁. Ha <strong>θ = 45°</strong>, a nyírófeszültség a <strong>legnagyobb</strong> (τ<sub>max</sub> = R) — ez a kör teteje. A talaj mégsem itt törik először, mert a normálfeszültség is számít (lásd a következő részt).</p></div>
+</section>
+
+<!-- ── 3. TÖRÉS ── -->
+<section id="tores" class="reveal">
+  <div class="eyebrow">3 · Mohr–Coulomb törési feltétel</div>
+  <h2>Mikor törik a talaj?</h2>
+  <p class="lead">A talaj akkor nyíródik meg, ha valamelyik síkon a nyírófeszültség eléri a talaj <strong>nyírószilárdságát</strong>. Ezt a <strong>Mohr–Coulomb-egyenes</strong> írja le: minél nagyobb a normálfeszültség, annál nagyobb nyírást bír el a talaj.</p>
+  <div class="formula"><span class="f-tau">τ<sub>f</sub></span> = <span class="f-env">c′</span> + <span class="f-sig">σ′</span>·tan<span class="f-env">φ′</span>
+    <small><strong>c′</strong> a kohézió (a tengelymetszet), <strong>φ′</strong> a belső súrlódási szög (az egyenes meredeksége). A talaj <strong>akkor törik</strong>, amikor a Mohr-kör <strong>érinti</strong> ezt az egyenest. Ekkor: R = (σ₁+σ₃)/2·sinφ′ + c′·cosφ′.</small>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Törés-szimulátor — feszítsd a mintát törésig</div>
+    <div class="panel-sub">Növeld σ₁-et (vagy csökkentsd σ₃-at, c′-t, φ′-t), amíg a kör eléri a kék egyenest. Akkor a minta megnyíródik a <strong>törési sík</strong> mentén.</div>
+    <div class="controls">
+      <div class="ctrl"><label>σ₁ <span class="val" id="t_s1v">240 kPa</span></label><input type="range" id="t_s1" min="40" max="500" step="5" value="240"></div>
+      <div class="ctrl"><label>σ₃ <span class="val" id="t_s3v">80 kPa</span></label><input type="range" id="t_s3" min="0" max="400" step="5" value="80"></div>
+      <div class="ctrl"><label>φ′ — súrlódási szög <span class="val" id="t_phv">30°</span></label><input type="range" id="t_ph" min="0" max="45" step="1" value="30"></div>
+      <div class="ctrl"><label>c′ — kohézió <span class="val" id="t_cv">10 kPa</span></label><input type="range" id="t_c" min="0" max="80" step="1" value="10"></div>
+    </div>
+    <div class="btn-row" style="margin-bottom:1rem">
+      <span style="font-family:var(--mono);font-size:11.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Talaj-előbeállítás:</span>
+      <button class="btn ghost small" data-preset="homok">Homok</button>
+      <button class="btn ghost small" data-preset="agyagD">Agyag (drénezett)</button>
+      <button class="btn ghost small" data-preset="agyagU">Agyag (drénezetlen)</button>
+      <button class="btn ghost small" data-preset="iszap">Iszap</button>
+    </div>
+    <div class="split">
+      <div class="svg-wrap"><svg id="toresSvg" viewBox="0 0 440 380" role="img" aria-label="Mohr-kör és törési burkológörbe"></svg></div>
+      <div>
+        <div class="svg-wrap"><svg id="mintaSvg" viewBox="0 0 240 240" role="img" aria-label="Talajminta törési síkkal"></svg></div>
+        <div class="readouts">
+          <div class="chip acc">Kihasználtság <b id="t_util">—</b></div>
+          <div class="chip">Törési sík <b id="t_ang">—</b></div>
+          <div class="chip sig">σ₁ töréskor <b id="t_s1f">—</b></div>
+        </div>
+        <div class="statusbar safe" id="t_status">STABIL</div>
+      </div>
+    </div>
+  </div>
+  <div class="note warn"><strong>A törési sík nem 45°-os!</strong> A minta nem a maximális nyírás (45°) síkján törik, hanem ott, ahol a kör érinti az egyenest: <strong>θ<sub>f</sub> = 45° + φ′/2</strong>. Súrlódó talajban (nagy φ′) a törési sík meredekebb.</div>
+</section>
+
+<!-- ── 4. NYÍRÓSZILÁRDSÁG ── -->
+<section id="esetek" class="reveal">
+  <div class="eyebrow">4 · Drénezett és drénezetlen</div>
+  <h2>A nyírószilárdság két arca</h2>
+  <p class="lead">Ugyanaz a talaj kétféleképpen viselkedik attól függően, hogy a terhelés alatt a <strong>pórusvíz el tud-e távozni</strong>. Ez dönti el, hogy a φ′–c′ párral (hatékony feszültség) vagy a c<sub>u</sub>-val (drénezetlen, φ = 0) számolunk.</p>
+  <div class="panel">
+    <div class="panel-title">Drénezett ↔ drénezetlen burkológörbe</div>
+    <div class="panel-sub">Váltogasd az esetet — figyeld, hogyan változik a burkológörbe alakja és a tönkremeneteli kör.</div>
+    <div class="controls">
+      <div class="ctrl" style="max-width:280px;flex:none"><label>Eset</label>
+        <select id="e_mode">
+          <option value="dr" selected>Drénezett — τ = c′ + σ′·tanφ′</option>
+          <option value="ud">Drénezetlen — τ = c_u (φ = 0)</option>
+        </select>
+      </div>
+      <div class="ctrl"><label>σ₃ (cellanyomás) <span class="val" id="e_s3v">80 kPa</span></label><input type="range" id="e_s3" min="0" max="300" step="5" value="80"></div>
+      <div class="ctrl" id="e_drwrap"><label>φ′ / c′ <span class="val" id="e_drv">28° / 8 kPa</span></label><input type="range" id="e_ph" min="0" max="42" step="1" value="28"></div>
+      <div class="ctrl" id="e_udwrap" style="display:none"><label>c_u — drénezetlen szilárdság <span class="val" id="e_cuv">60 kPa</span></label><input type="range" id="e_cu" min="10" max="160" step="5" value="60"></div>
+    </div>
+    <div class="svg-wrap"><svg id="esetSvg" viewBox="0 0 880 320" role="img" aria-label="Drénezett és drénezetlen burkológörbe összevetése"></svg></div>
+    <div class="readouts">
+      <div class="chip acc">Tönkremeneteli σ₁ <b id="e_s1">—</b></div>
+      <div class="chip">Deviátor (σ₁−σ₃) <b id="e_dev">—</b></div>
+      <div class="chip">Törési sík <b id="e_ang">—</b></div>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card"><h4><span class="dot env"></span>Drénezett (CD)</h4><p>Lassú terhelés / vízáteresztő talaj: a pórusvíznyomás leépül. A <strong>hatékony</strong> feszültségekkel és a φ′–c′ burkológörbével számolunk. Homokra szinte mindig ez érvényes.</p></div>
+    <div class="card"><h4><span class="dot danger"></span>Drénezetlen (UU)</h4><p>Gyors terhelés / telített agyag: a víz nem tud kiáramlani, többlet-pórusnyomás keletkezik. A burkológörbe <strong>vízszintes</strong> (φ = 0), a szilárdság az állandó c<sub>u</sub>.</p></div>
+    <div class="card"><h4><span class="dot accent"></span>Miért φ = 0?</h4><p>Telített talajban a cellanyomás teljes egészében a pórusvízre megy, a <strong>hatékony</strong> feszültség nem változik — így a deviátorfeszültség a cellanyomástól függetlenül ugyanaz: a kör mérete állandó.</p></div>
+  </div>
+  <table>
+    <tr><th>Talaj / eset</th><th>φ′</th><th>c′ vagy c_u</th><th>Jellemző</th></tr>
+    <tr><td>Homok, kavics</td><td>30–40°</td><td>c′ ≈ 0</td><td>tisztán súrlódó</td></tr>
+    <tr><td>Iszap</td><td>27–34°</td><td>kis c′</td><td>átmeneti</td></tr>
+    <tr><td>Agyag — drénezett</td><td>18–28°</td><td>kis c′</td><td>hatékony feszültség</td></tr>
+    <tr><td>Agyag — drénezetlen</td><td>0°</td><td>c_u = 20–150 kPa</td><td>vízszintes burok</td></tr>
+  </table>
+</section>
+
+<!-- ── 5. KVÍZ ── -->
+<section id="kviz" class="reveal">
+  <div class="eyebrow">5 · Tudáspróba</div>
+  <h2>Kvíz — 12 kérdés</h2>
+  <p class="lead">A kérdések sorrendje minden indításnál más. Minden válasz után rövid magyarázatot kapsz.</p>
+  <div class="quiz-box">
+    <div id="quizMain">
+      <div class="progress-track"><div class="progress-fill" id="qProg"></div></div>
+      <div class="quiz-progress"><span id="qCount">1 / 12</span><span id="qScoreLive">Pont: 0</span></div>
+      <div class="quiz-q" id="qText"></div>
+      <div class="quiz-opts" id="qOpts"></div>
+      <div class="quiz-expl" id="qExpl"></div>
+      <button class="btn quiz-next" id="qNext">Következő →</button>
+    </div>
+    <div class="quiz-result" id="quizResult">
+      <div class="quiz-score" id="qFinal">0 / 12</div>
+      <div class="quiz-msg" id="qMsg"></div>
+      <button class="btn" id="qRestart">↺ Újrakezdés</button>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>
+  Mohr-kör — interaktív tananyag · Talajmechanika · Készült oktatási célra · A számítások szemléltető jellegűek, tervezésre az MSZ EN 1997 (EC7) szerinti eljárás irányadó.
+</footer>
+
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const reduced=(typeof window.matchMedia==='function')?window.matchMedia('(prefers-reduced-motion: reduce)').matches:false;
+const rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI;
+const fmt=(v,d)=>{d=d||0;if(!isFinite(v))return '—';return v.toFixed(d).replace('.',',');};
+
+/* ── Nav + reveal ── */
+(function(){
+  const links=[...document.querySelectorAll('.nav-link')];
+  const secs=links.map(l=>document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  if(typeof IntersectionObserver==='undefined'){document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));return;}
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}});},{rootMargin:'-30% 0px -60% 0px'});
+  secs.forEach(s=>io.observe(s));
+  const rio=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rio.unobserve(e.target);}});},{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>rio.observe(el));
+})();
+
+/* ── közös: σ-τ tengelyrendszer + kör rajzoló ──
+   PLOT: σ tengely vízszintes, τ függőleges (felfelé +). */
+const PLOT={x0:54,yAxis:250,s:0.74,xMax:430,sigMax:0};
+PLOT.sigMax=(PLOT.xMax-PLOT.x0)/PLOT.s; // ~508
+function SX(sig){return PLOT.x0+sig*PLOT.s;}
+function SY(tau){return PLOT.yAxis-tau*PLOT.s;}
+function axes(){
+  let s='';
+  // rács
+  for(let g=0;g<=500;g+=50){const x=SX(g);if(x>PLOT.xMax+2)break;s+='<line x1="'+x.toFixed(1)+'" y1="40" x2="'+x.toFixed(1)+'" y2="'+(PLOT.yAxis+8)+'" stroke="#eef2f0" stroke-width="1"/>';}
+  for(let g=0;g<=200;g+=50){const y=SY(g);s+='<line x1="'+PLOT.x0+'" y1="'+y.toFixed(1)+'" x2="'+PLOT.xMax+'" y2="'+y.toFixed(1)+'" stroke="#eef2f0" stroke-width="1"/>';s+='<line x1="'+PLOT.x0+'" y1="'+SY(-g).toFixed(1)+'" x2="'+PLOT.xMax+'" y2="'+SY(-g).toFixed(1)+'" stroke="#f5f7f6" stroke-width="1"/>';}
+  // tengelyek
+  s+='<line x1="'+PLOT.x0+'" y1="'+PLOT.yAxis+'" x2="'+(PLOT.xMax+6)+'" y2="'+PLOT.yAxis+'" stroke="#0d272b" stroke-width="1.6"/>';
+  s+='<polygon points="'+(PLOT.xMax+6)+','+PLOT.yAxis+' '+(PLOT.xMax-2)+','+(PLOT.yAxis-4)+' '+(PLOT.xMax-2)+','+(PLOT.yAxis+4)+'" fill="#0d272b"/>';
+  s+='<line x1="'+PLOT.x0+'" y1="'+(PLOT.yAxis+30)+'" x2="'+PLOT.x0+'" y2="34" stroke="#0d272b" stroke-width="1.6"/>';
+  s+='<polygon points="'+PLOT.x0+',30 '+(PLOT.x0-4)+',38 '+(PLOT.x0+4)+',38" fill="#0d272b"/>';
+  s+='<text x="'+(PLOT.xMax-2)+'" y="'+(PLOT.yAxis+22)+'" text-anchor="end" font-family="JetBrains Mono" font-size="12" fill="#7a5230">σ [kPa]</text>';
+  s+='<text x="'+(PLOT.x0+8)+'" y="44" font-family="JetBrains Mono" font-size="12" fill="#c2521f">τ [kPa]</text>';
+  // skála feliratok σ
+  for(let g=100;g<=500;g+=100){const x=SX(g);if(x>PLOT.xMax-6)break;s+='<text x="'+x.toFixed(1)+'" y="'+(PLOT.yAxis+18)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#9aa">'+g+'</text>';}
+  return s;
+}
+function circleSvg(s1,s3){
+  const C=(s1+s3)/2,R=(s1-s3)/2;
+  return '<circle cx="'+SX(C).toFixed(1)+'" cy="'+PLOT.yAxis+'" r="'+(R*PLOT.s).toFixed(1)+'" fill="rgba(14,124,107,0.07)" stroke="#0e7c6b" stroke-width="2.2"/>'+
+    '<circle cx="'+SX(C).toFixed(1)+'" cy="'+PLOT.yAxis+'" r="2.6" fill="#34514f"/>'+
+    '<circle cx="'+SX(s3).toFixed(1)+'" cy="'+PLOT.yAxis+'" r="3.2" fill="#7a5230"/>'+
+    '<circle cx="'+SX(s1).toFixed(1)+'" cy="'+PLOT.yAxis+'" r="3.2" fill="#7a5230"/>'+
+    '<text x="'+SX(s3).toFixed(1)+'" y="'+(PLOT.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₃</text>'+
+    '<text x="'+SX(s1).toFixed(1)+'" y="'+(PLOT.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+}
+
+/* ════ HERO mini-animáció ════ */
+(function(){
+  const svg=$("heroSvg");if(!svg)return;
+  const W=190,H=150,ox=18,oy=120,sc=0.34; // kis koordináták
+  const c=110,phi=30,coh=8; // burkológörbe: τ=coh+σ tanφ (kis skálán)
+  function X(s){return ox+s*sc;} function Y(t){return oy-t*sc;}
+  function envY(s){return Y(coh+s*Math.tan(rad(phi)));}
+  let R=20,growing=true,flash=0;
+  function frame(){
+    const Rf=c*Math.sin(rad(phi))+coh*Math.cos(rad(phi)); // törési sugár (C=c körközéppont? itt C fix=c)
+    let col='#0e7c6b',fill='rgba(14,124,107,0.08)';
+    if(flash>0){col='#a32626';fill='rgba(163,38,38,0.13)';flash--;}
+    let s='';
+    s+='<line x1="'+ox+'" y1="'+oy+'" x2="'+(W-6)+'" y2="'+oy+'" stroke="#0d272b" stroke-width="1.3"/>';
+    s+='<line x1="'+ox+'" y1="'+(oy+8)+'" x2="'+ox+'" y2="14" stroke="#0d272b" stroke-width="1.3"/>';
+    // burkológörbe
+    s+='<line x1="'+ox+'" y1="'+envY(0).toFixed(1)+'" x2="'+(W-6)+'" y2="'+envY((W-6-ox)/sc).toFixed(1)+'" stroke="#1b6fae" stroke-width="2"/>';
+    // kör (középpont fix C=c)
+    s+='<circle cx="'+X(c).toFixed(1)+'" cy="'+oy+'" r="'+(R*sc).toFixed(1)+'" fill="'+fill+'" stroke="'+col+'" stroke-width="2"/>';
+    svg.innerHTML=s;
+    if(growing){R+=1.1;if(R*sc>=Rf*sc-0.4){growing=false;flash=10;}}
+    else{R-=2.2;if(R<18){R=18;growing=true;}}
+  }
+  if(reduced){R=Math.round((c*Math.sin(rad(phi))+coh*Math.cos(rad(phi)))*0.7);frame();return;}
+  frame();setInterval(frame,55);
+})();
+
+/* ════ 2. MOHR-KÖR JÁTSZÓTÉR ════ */
+(function(){
+  const svg=$("korSvg"),el=$("elemSvg");if(!svg)return;
+  function draw(){
+    let s1=+$("k_s1").value,s3=+$("k_s3").value,th=+$("k_th").value;
+    if(s3>s1){s3=s1;$("k_s3").value=s1;}
+    $("k_s1v").textContent=s1+" kPa";$("k_s3v").textContent=s3+" kPa";$("k_thv").textContent=th+"°";
+    const C=(s1+s3)/2,R=(s1-s3)/2;
+    const sn=C+R*Math.cos(rad(2*th)),tau=R*Math.sin(rad(2*th));
+    // kör + pont
+    let g=axes()+circleSvg(s1,s3);
+    // sugár a ponthoz (2θ)
+    const px=SX(sn),py=SY(tau);
+    g+='<line x1="'+SX(C).toFixed(1)+'" y1="'+PLOT.yAxis+'" x2="'+px.toFixed(1)+'" y2="'+py.toFixed(1)+'" stroke="#c2521f" stroke-width="1.5" stroke-dasharray="4 3"/>';
+    // τ_max jelölés (kör teteje)
+    g+='<circle cx="'+SX(C).toFixed(1)+'" cy="'+SY(R).toFixed(1)+'" r="2.4" fill="#cfd9d6"/>';
+    // pont vetületei
+    g+='<line x1="'+px.toFixed(1)+'" y1="'+py.toFixed(1)+'" x2="'+px.toFixed(1)+'" y2="'+PLOT.yAxis+'" stroke="#c2521f" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>';
+    g+='<line x1="'+px.toFixed(1)+'" y1="'+py.toFixed(1)+'" x2="'+PLOT.x0+'" y2="'+py.toFixed(1)+'" stroke="#c2521f" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>';
+    g+='<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="5" fill="#c2521f"/>';
+    g+='<text x="'+(px+9).toFixed(1)+'" y="'+(py-6).toFixed(1)+'" font-family="JetBrains Mono" font-size="11" fill="#c2521f">(σₙ, τ)</text>';
+    // 2θ ív felirat
+    g+='<text x="'+(SX(C)+14).toFixed(1)+'" y="'+(PLOT.yAxis-8)+'" font-family="JetBrains Mono" font-size="10.5" fill="#64807d">2θ='+(2*th)+'°</text>';
+    svg.innerHTML=g;
+    // talajelem
+    el.innerHTML=elemDraw(th,s1,s3,sn,tau);
+    $("k_sn").textContent=fmt(sn,0)+" kPa";
+    $("k_tau").textContent=fmt(tau,0)+" kPa";
+    $("k_c").textContent=fmt(C,0)+" kPa";
+    $("k_r").textContent=fmt(R,0)+" kPa";
+  }
+  function elemDraw(th,s1,s3,sn,tau){
+    const cx=120,cy=120,L=64;
+    let s='<rect x="'+(cx-L)+'" y="'+(cy-L)+'" width="'+(2*L)+'" height="'+(2*L)+'" fill="#efe9df" stroke="#bba37e" stroke-width="1.5"/>';
+    // főfeszültség nyilak: σ1 függőleges, σ3 vízszintes
+    s+=arrow(cx,cy-L-22,cx,cy-L-4,'#7a5230',2.4)+arrow(cx,cy+L+22,cx,cy+L+4,'#7a5230',2.4);
+    s+='<text x="'+(cx+6)+'" y="'+(cy-L-12)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    s+=arrow(cx-L-22,cy,cx-L-4,cy,'#b08968',2.4)+arrow(cx+L+22,cy,cx+L+4,cy,'#b08968',2.4);
+    s+='<text x="'+(cx+L+6)+'" y="'+(cy-6)+'" font-family="JetBrains Mono" font-size="11" fill="#b08968">σ₃</text>';
+    // vizsgált sík: normálisa θ-t zár be a függőlegessel (σ1 iránnyal). A sík vonala merőleges a normálisra.
+    const a=rad(th); // a sík normálisának szöge a függőlegestől
+    // sík iránya = normális +90°. normális irány (sinθ, -cosθ) [képernyő y lefelé]
+    const nx=Math.sin(a),ny=-Math.cos(a);
+    const dx=ny,dy=-nx; // a sík menti irány (merőleges a normálisra)
+    const half=L*1.18;
+    const x1=cx-dx*half,y1=cy-dy*half,x2=cx+dx*half,y2=cy+dy*half;
+    s+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="#0e7c6b" stroke-width="2.4"/>';
+    // σn (normális mentén) és τ (sík mentén) nyilak a sík közepén
+    const ns=22*Math.min(1.2,sn/Math.max(s1,1))+8, ts=22*Math.min(1.2,Math.abs(tau)/Math.max((s1-s3)/2,1))+4;
+    s+=arrow(cx+nx*8,cy+ny*8,cx+nx*(8+ns),cy+ny*(8+ns),'#c2521f',2.2);
+    s+='<text x="'+(cx+nx*(14+ns)).toFixed(1)+'" y="'+(cy+ny*(14+ns)).toFixed(1)+'" font-family="JetBrains Mono" font-size="10.5" fill="#c2521f">σₙ</text>';
+    const tsign=tau>=0?1:-1;
+    s+=arrow(cx,cy,cx+dx*ts*tsign,cy+dy*ts*tsign,'#0e7c6b',2.2);
+    s+='<text x="'+(cx+dx*(ts+10)*tsign).toFixed(1)+'" y="'+(cy+dy*(ts+10)*tsign).toFixed(1)+'" font-family="JetBrains Mono" font-size="10.5" fill="#0e7c6b">τ</text>';
+    return s;
+  }
+  ["k_s1","k_s3","k_th"].forEach(id=>$(id).addEventListener('input',draw));
+  draw();
+})();
+
+/* nyíl segéd (közös) */
+function arrow(x1,y1,x2,y2,col,w){
+  const a=Math.atan2(y2-y1,x2-x1),L=7,sp=0.42;
+  const xa=x2-L*Math.cos(a-sp),ya=y2-L*Math.sin(a-sp),xb=x2-L*Math.cos(a+sp),yb=y2-L*Math.sin(a+sp);
+  return '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+col+'" stroke-width="'+w+'"/>'+
+    '<path d="M'+x2.toFixed(1)+','+y2.toFixed(1)+' L'+xa.toFixed(1)+','+ya.toFixed(1)+' L'+xb.toFixed(1)+','+yb.toFixed(1)+' z" fill="'+col+'"/>';
+}
+
+/* ════ 3. TÖRÉS-SZIMULÁTOR ════ */
+(function(){
+  const svg=$("toresSvg"),minta=$("mintaSvg"),status=$("t_status");if(!svg)return;
+  const presets={homok:{ph:34,c:0,s1:240,s3:90},agyagD:{ph:24,c:12,s1:200,s3:70},agyagU:{ph:0,c:55,s1:200,s3:90},iszap:{ph:30,c:5,s1:220,s3:80}};
+  function draw(){
+    let s1=+$("t_s1").value,s3=+$("t_s3").value,phi=+$("t_ph").value,coh=+$("t_c").value;
+    if(s3>s1){s3=s1;$("t_s3").value=s1;}
+    $("t_s1v").textContent=s1+" kPa";$("t_s3v").textContent=s3+" kPa";$("t_phv").textContent=phi+"°";$("t_cv").textContent=coh+" kPa";
+    const C=(s1+s3)/2,R=(s1-s3)/2;
+    const Rf=C*Math.sin(rad(phi))+coh*Math.cos(rad(phi)); // törési sugár adott C-nél
+    const util=Rf>0?R/Rf:99; const failed=util>=0.999;
+    // burkológörbe
+    let g=axes()+circleSvg(s1,s3);
+    const envCol=failed?'#a32626':'#1b6fae';
+    const tanp=Math.tan(rad(phi));
+    const xEnd=PLOT.sigMax, yEnd=coh+xEnd*tanp;
+    g+='<line x1="'+SX(0).toFixed(1)+'" y1="'+SY(coh).toFixed(1)+'" x2="'+SX(xEnd).toFixed(1)+'" y2="'+SY(yEnd).toFixed(1)+'" stroke="'+envCol+'" stroke-width="2.4"/>';
+    // tükör (alsó) burkológörbe halványan
+    g+='<line x1="'+SX(0).toFixed(1)+'" y1="'+SY(-coh).toFixed(1)+'" x2="'+SX(xEnd).toFixed(1)+'" y2="'+SY(-yEnd).toFixed(1)+'" stroke="'+envCol+'" stroke-width="1.2" opacity="0.35"/>';
+    if(coh>0){g+='<text x="'+(PLOT.x0-6)+'" y="'+SY(coh).toFixed(1)+'" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="'+envCol+'">c′</text>';}
+    g+='<text x="'+SX(xEnd*0.62).toFixed(1)+'" y="'+(SY(coh+xEnd*0.62*tanp)-6).toFixed(1)+'" font-family="JetBrains Mono" font-size="11" fill="'+envCol+'">φ′='+phi+'°</text>';
+    // érintési (törési) pont a körön: σ=C-R sinφ, τ=R cosφ
+    if(R>0.5){
+      const tpx=C-R*Math.sin(rad(phi)),tpy=R*Math.cos(rad(phi));
+      g+='<circle cx="'+SX(tpx).toFixed(1)+'" cy="'+SY(tpy).toFixed(1)+'" r="4.5" fill="'+(failed?'#a32626':'#0e7c6b')+'" stroke="#fff" stroke-width="1"/>';
+      g+='<line x1="'+SX(C).toFixed(1)+'" y1="'+PLOT.yAxis+'" x2="'+SX(tpx).toFixed(1)+'" y2="'+SY(tpy).toFixed(1)+'" stroke="'+(failed?'#a32626':'#0e7c6b')+'" stroke-width="1.2" stroke-dasharray="4 3" opacity="0.7"/>';
+    }
+    svg.innerHTML=g;
+    // minta
+    const thf=45+phi/2;
+    minta.innerHTML=mintaDraw(thf,failed,util);
+    $("t_util").textContent=fmt(Math.min(util*100,999),0)+" %";
+    $("t_ang").textContent="θ_f = "+fmt(thf,1)+"°";
+    const Kp=Math.pow(Math.tan(rad(45+phi/2)),2);
+    const s1f=s3*Kp+2*coh*Math.sqrt(Kp);
+    $("t_s1f").textContent=fmt(s1f,0)+" kPa";
+    status.className="statusbar "+(failed?"fail":"safe");
+    status.textContent=failed?"TÖRÉS — a minta megnyíródott":"STABIL — "+fmt(util*100,0)+"% kihasználtság";
+  }
+  function mintaDraw(thf,failed,util){
+    const cx=120,cy=120,L=58;
+    const a=rad(thf); // törési sík szöge a vízszintessel
+    const dx=Math.cos(a),dy=-Math.sin(a); // sík menti irány (felfelé jobbra)
+    // törésvonal a négyzeten át
+    const x1=cx-dx*L*1.5,y1=cy-dy*L*1.5,x2=cx+dx*L*1.5,y2=cy+dy*L*1.5;
+    const fillCol=failed?'#f1d9d4':'#efe9df',strokeCol=failed?'#a32626':'#bba37e';
+    // felső csúszó ék (a vonal felett): eltolás a sík mentén ha törik
+    const slip=failed?14:0;
+    const sx=(dx*slip).toFixed(1),sy=(dy*slip).toFixed(1);
+    let s='';
+    // alsó (álló) rész — teljes négyzet háttér
+    s+='<rect x="'+(cx-L)+'" y="'+(cy-L)+'" width="'+(2*L)+'" height="'+(2*L)+'" fill="'+fillCol+'" stroke="'+strokeCol+'" stroke-width="1.5"/>';
+    // a felső ék külön (clip a négyzetre + a sík fölé) — egyszerűsítve: a teljes négyzet felső felét a vonal mentén csúsztatjuk
+    s+='<g'+(failed&&!reduced?' class="slip" style="--sx:'+sx+'px;--sy:'+sy+'px"':'')+(failed?' transform="translate('+sx+','+sy+')"':'')+'>';
+    s+='<clipPath id="upClip"><polygon points="'+(cx-L)+','+(cy-L)+' '+(cx+L)+','+(cy-L)+' '+x2.toFixed(1)+','+y2.toFixed(1)+' '+x1.toFixed(1)+','+y1.toFixed(1)+'"/></clipPath>';
+    s+='<rect x="'+(cx-L)+'" y="'+(cy-L)+'" width="'+(2*L)+'" height="'+(2*L)+'" fill="'+fillCol+'" stroke="'+strokeCol+'" stroke-width="1.5" clip-path="url(#upClip)"/>';
+    s+='</g>';
+    // törési sík vonala
+    s+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+(failed?'#a32626':'#0e7c6b')+'" stroke-width="2.4"'+(failed?'':' stroke-dasharray="5 4"')+'/>';
+    // főfeszültség nyilak
+    s+=arrow(cx,cy-L-20,cx,cy-L-3,'#7a5230',2.4)+arrow(cx,cy+L+20,cx,cy+L+3,'#7a5230',2.4);
+    s+='<text x="'+(cx+6)+'" y="'+(cy-L-10)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    s+=arrow(cx-L-20,cy,cx-L-3,cy,'#b08968',2.2)+arrow(cx+L+20,cy,cx+L+3,cy,'#b08968',2.2);
+    // törési sík szöge
+    s+='<text x="'+(cx-L+4)+'" y="'+(cy+L-6)+'" font-family="JetBrains Mono" font-size="10.5" fill="'+(failed?'#a32626':'#0e7c6b')+'">θ_f='+fmt(thf,0)+'°</text>';
+    if(failed){s+='<text x="'+cx+'" y="'+(cy-L-30)+'" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">TÖRÉS</text>';}
+    return s;
+  }
+  ["t_s1","t_s3","t_ph","t_c"].forEach(id=>$(id).addEventListener('input',draw));
+  document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{
+    const p=presets[b.dataset.preset];if(!p)return;
+    $("t_ph").value=p.ph;$("t_c").value=p.c;$("t_s1").value=p.s1;$("t_s3").value=p.s3;draw();
+  }));
+  draw();
+})();
+
+/* ════ 4. NYÍRÓSZILÁRDSÁG — drénezett / drénezetlen ════ */
+(function(){
+  const svg=$("esetSvg");if(!svg)return;
+  // saját, szélesebb koordinátarendszer
+  const P={x0:56,yAxis:250,s:0.62,xMax:840};
+  const X=s=>P.x0+s*P.s, Y=t=>P.yAxis-t*P.s;
+  function ax(){
+    let s='';
+    s+='<line x1="'+P.x0+'" y1="'+P.yAxis+'" x2="'+(P.xMax+6)+'" y2="'+P.yAxis+'" stroke="#0d272b" stroke-width="1.6"/>';
+    s+='<polygon points="'+(P.xMax+6)+','+P.yAxis+' '+(P.xMax-2)+','+(P.yAxis-4)+' '+(P.xMax-2)+','+(P.yAxis+4)+'" fill="#0d272b"/>';
+    s+='<line x1="'+P.x0+'" y1="'+(P.yAxis+24)+'" x2="'+P.x0+'" y2="26" stroke="#0d272b" stroke-width="1.6"/>';
+    s+='<polygon points="'+P.x0+',22 '+(P.x0-4)+',30 '+(P.x0+4)+',30" fill="#0d272b"/>';
+    s+='<text x="'+(P.xMax-2)+'" y="'+(P.yAxis+20)+'" text-anchor="end" font-family="JetBrains Mono" font-size="12" fill="#7a5230">σ [kPa]</text>';
+    s+='<text x="'+(P.x0+8)+'" y="36" font-family="JetBrains Mono" font-size="12" fill="#c2521f">τ [kPa]</text>';
+    for(let g=100;g<=600;g+=100){const x=X(g);if(x>P.xMax-6)break;s+='<line x1="'+x+'" y1="'+(P.yAxis-2)+'" x2="'+x+'" y2="'+(P.yAxis+4)+'" stroke="#9aa" stroke-width="1"/><text x="'+x+'" y="'+(P.yAxis+18)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#9aa">'+g+'</text>';}
+    return s;
+  }
+  function draw(){
+    const mode=$("e_mode").value, s3=+$("e_s3").value;
+    const dr=mode==='dr';
+    $("e_drwrap").style.display=dr?'':'none';
+    $("e_udwrap").style.display=dr?'none':'';
+    $("e_s3v").textContent=s3+" kPa";
+    let phi,coh,s1,R,C,thf;
+    if(dr){
+      phi=+$("e_ph").value;coh=8;
+      $("e_drv").textContent=phi+"° / "+coh+" kPa";
+      const Kp=Math.pow(Math.tan(rad(45+phi/2)),2); s1=s3*Kp+2*coh*Math.sqrt(Kp);
+      C=(s1+s3)/2;R=(s1-s3)/2;thf=45+phi/2;
+    }else{
+      const cu=+$("e_cu").value; $("e_cuv").textContent=cu+" kPa";
+      phi=0;coh=cu; s1=s3+2*cu; C=(s1+s3)/2;R=cu;thf=45;
+    }
+    let g=ax();
+    // burkológörbe
+    const tanp=Math.tan(rad(phi)), xEnd=( (P.xMax-P.x0)/P.s );
+    g+='<line x1="'+X(0)+'" y1="'+Y(coh).toFixed(1)+'" x2="'+X(xEnd).toFixed(1)+'" y2="'+Y(coh+xEnd*tanp).toFixed(1)+'" stroke="#1b6fae" stroke-width="2.6"/>';
+    g+='<text x="'+X(xEnd*0.5).toFixed(1)+'" y="'+(Y(coh+xEnd*0.5*tanp)-8).toFixed(1)+'" font-family="JetBrains Mono" font-size="12" fill="#1b6fae">'+(dr?'τ = c′ + σ·tanφ′':'τ = c_u (φ=0)')+'</text>';
+    // tönkremeneteli kör (érinti a burkot)
+    g+='<circle cx="'+X(C).toFixed(1)+'" cy="'+P.yAxis+'" r="'+(R*P.s).toFixed(1)+'" fill="rgba(14,124,107,0.08)" stroke="#0e7c6b" stroke-width="2.2"/>';
+    g+='<circle cx="'+X(s3).toFixed(1)+'" cy="'+P.yAxis+'" r="3" fill="#7a5230"/><text x="'+X(s3).toFixed(1)+'" y="'+(P.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₃</text>';
+    g+='<circle cx="'+X(s1).toFixed(1)+'" cy="'+P.yAxis+'" r="3" fill="#7a5230"/><text x="'+X(s1).toFixed(1)+'" y="'+(P.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    const tpx=C-R*Math.sin(rad(phi)),tpy=R*Math.cos(rad(phi));
+    g+='<circle cx="'+X(tpx).toFixed(1)+'" cy="'+Y(tpy).toFixed(1)+'" r="4.5" fill="#a32626" stroke="#fff" stroke-width="1"/>';
+    svg.innerHTML=g;
+    $("e_s1").textContent=fmt(s1,0)+" kPa";
+    $("e_dev").textContent=fmt(s1-s3,0)+" kPa";
+    $("e_ang").textContent="θ_f = "+fmt(thf,1)+"°";
+  }
+  ["e_mode","e_s3","e_ph","e_cu"].forEach(id=>$(id).addEventListener('input',draw));
+  draw();
+})();
+
+/* ════ 5. KVÍZ ════ */
+(function(){
+  const Q=[
+    {q:"Mit ábrázol a Mohr-kör?",o:["A talaj szemeloszlását","Egy pont teljes feszültségállapotát — minden sík σ–τ párját","A süllyedés időbeli alakulását","A pórusvíznyomás eloszlását"],c:1,e:"A Mohr-kör egyetlen pontban az összes lehetséges metszősík normál- és nyírófeszültségét tartalmazza."},
+    {q:"Mi a Mohr-kör középpontja és sugara?",o:["Közép σ₁, sugár σ₃","Közép (σ₁+σ₃)/2, sugár (σ₁−σ₃)/2","Közép (σ₁−σ₃)/2, sugár (σ₁+σ₃)/2","Közép σ₃, sugár σ₁"],c:1,e:"Középpont = az átlagos normálfeszültség (σ₁+σ₃)/2, sugár = a maximális nyírófeszültség (σ₁−σ₃)/2."},
+    {q:"Melyik síkon a legnagyobb a nyírófeszültség?",o:["A főfeszültségi síkon (θ=0°)","θ=30°-nál","θ=45°-nál (a kör teteje)","θ=90°-nál"],c:2,e:"τ_max = R a θ=45°-os síkon — ez a kör legmagasabb pontja. De a talaj nem feltétlenül itt törik!"},
+    {q:"A Mohr–Coulomb törési feltétel:",o:["τ_f = c′ + σ′·tanφ′","τ_f = c′ − σ′·tanφ′","σ′ = c′ + τ·tanφ′","τ_f = σ′ / tanφ′"],c:0,e:"A nyírószilárdság a kohézióból (c′) és a normálfeszültséggel arányos súrlódásból (σ′·tanφ′) tevődik össze."},
+    {q:"Mikor törik a talaj a Mohr-diagramon?",o:["Amikor a kör középpontja eléri az egyenest","Amikor a kör érinti a burkológörbét","Amikor a kör teljesen az egyenes fölé kerül","Amikor σ₃ = 0"],c:1,e:"A törés az érintés pillanata: ekkor egyetlen síkon a nyírófeszültség épp eléri a szilárdságot."},
+    {q:"Mekkora a törési sík szöge a főfeszültség síkjához képest?",o:["45°","45° + φ′/2","φ′","90° − φ′"],c:1,e:"θ_f = 45° + φ′/2. Súrlódó talajban (nagy φ′) a törési sík meredekebb, mint a maximális nyírás 45°-os síkja."},
+    {q:"Tisztán súrlódó talaj (homok) burkológörbéje:",o:["Vízszintes egyenes","Az origóból induló ferde egyenes (c′=0)","Függőleges egyenes","Görbe vonal"],c:1,e:"Homokban c′≈0, így a burkológörbe az origóból indul: τ_f = σ′·tanφ′."},
+    {q:"Drénezetlen telített agyag burkológörbéje a teljes feszültségek terében:",o:["Meredek ferde egyenes","Vízszintes egyenes τ = c_u (φ=0)","Az origóból indul","Negatív meredekségű"],c:1,e:"Drénezetlen esetben φ=0, a szilárdság a cellanyomástól függetlenül állandó c_u — a burok vízszintes."},
+    {q:"Miért φ=0 a drénezetlen telített agyag?",o:["Mert nincs súrlódás a szemcsék közt","Mert a cellanyomás-növekmény a pórusvízre megy, a hatékony feszültség nem változik","Mert az agyag nem visel nyírást","Mert c_u nagyon nagy"],c:1,e:"Telített, zárt rendszerben Δσ teljes egészében Δu lesz, így σ′ és a deviátorfeszültség a cellanyomástól független — a kör mérete állandó."},
+    {q:"Ha nő a normálfeszültség σ′ a síkon, a nyírószilárdság:",o:["Csökken","Nő (a súrlódás miatt)","Nem változik","Zérusra esik"],c:1,e:"A nagyobb normálfeszültség nagyobb szemcseközi súrlódást, így nagyobb nyírószilárdságot ad — ezt fejezi ki a σ′·tanφ′ tag."},
+    {q:"Mit jelent c′ (kohézió) a burkológörbén?",o:["Az egyenes meredekségét","A tengelymetszetet (szilárdság σ′=0-nál)","A törési sík szögét","A kör sugarát"],c:1,e:"c′ a τ-tengelymetszet: az a nyírószilárdság, ami zérus normálfeszültségnél is megvan (pl. kötött talaj)."},
+    {q:"A nagyobb Mohr-kör (nagyobb σ₁−σ₃) azt jelenti, hogy:",o:["Kisebb a deviátorfeszültség","Közelebb a töréshez (nagyobb a nyíróigénybevétel)","Nincs nyírás","Csökken a kihasználtság"],c:1,e:"A sugár R=(σ₁−σ₃)/2 a maximális nyírófeszültség; minél nagyobb, annál közelebb a kör a burkológörbéhez."}
+  ];
+  let order=[],idx=0,score=0;
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function start(){order=shuffle([...Q.keys()]);idx=0;score=0;$("quizResult").classList.remove('show');$("quizMain").style.display='block';show();}
+  function show(){
+    const q=Q[order[idx]];
+    $("qCount").textContent=(idx+1)+" / "+Q.length;
+    $("qScoreLive").textContent="Pont: "+score;
+    $("qProg").style.width=(idx/Q.length*100)+"%";
+    $("qText").textContent=q.q;
+    $("qExpl").classList.remove('show');$("qNext").classList.remove('show');
+    const opts=shuffle(q.o.map((t,i)=>({t,ok:i===q.c})));
+    $("qOpts").innerHTML="";
+    opts.forEach(o=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o.t;b.dataset.ok=o.ok?"1":"0";
+      b.addEventListener('click',()=>{
+        [...$("qOpts").children].forEach(x=>x.disabled=true);
+        if(o.ok){b.classList.add('correct');score++;}
+        else{b.classList.add('wrong');[...$("qOpts").children].find(x=>x.dataset.ok==="1").classList.add('correct');}
+        $("qScoreLive").textContent="Pont: "+score;
+        $("qExpl").innerHTML="<b>Magyarázat:</b> "+q.e;$("qExpl").classList.add('show');
+        $("qNext").classList.add('show');$("qNext").textContent=idx<Q.length-1?"Következő →":"Eredmény →";
+      });
+      $("qOpts").appendChild(b);
+    });
+  }
+  $("qNext").addEventListener('click',()=>{
+    idx++;
+    if(idx<Q.length){show();}
+    else{
+      $("quizMain").style.display='none';$("quizResult").classList.add('show');
+      $("qFinal").textContent=score+" / "+Q.length;
+      const r=score/Q.length;
+      $("qMsg").textContent=r>=0.9?"Kiváló! A Mohr-kör és a törési feltétel a kisujjadban van.":
+        r>=0.7?"Szép munka! Egy-két részlet még csiszolható — játssz a törés-szimulátorral.":
+        r>=0.5?"Jó alap, de érdemes újra végigvinni a törési burkológörbe és a θ_f = 45°+φ′/2 részt.":
+        "Ne csüggedj — görgess vissza az alapokhoz, és próbáld újra!";
+    }
+  });
+  $("qRestart").addEventListener('click',start);
+  start();
+})();
+})();
+</script>
+</body>
+</html>
