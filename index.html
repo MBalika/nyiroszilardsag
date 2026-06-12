@@ -418,7 +418,7 @@ function circleSvg(s1,s3){
     s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="Inter" font-size="11" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
     // vizsgált sík: normálisa θ-t zár be a függőlegessel (σ1 iránnyal). A sík vonala merőleges a normálisra.
     const a=rad(th);
-    const nx=Math.sin(a),ny=-Math.cos(a);
+    const nx=-Math.sin(a),ny=-Math.cos(a); // megfordított sík (mint a törés-szimulátorban)
     const dx=ny,dy=-nx; // a sík menti irány
     const tx=Math.abs(dx)>1e-6?hw/Math.abs(dx):1e9, ty=Math.abs(dy)>1e-6?hh/Math.abs(dy):1e9;
     const t=Math.min(tx,ty); // a mintára vágva
