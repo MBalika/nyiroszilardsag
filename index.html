@@ -191,9 +191,9 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
 <section id="tores" class="reveal">
   <div class="eyebrow">3 · Mohr–Coulomb törési feltétel</div>
   <h2>Mikor törik a talaj?</h2>
-  <p class="lead">A talaj akkor nyíródik meg, ha valamelyik síkon a nyírófeszültség eléri a talaj <strong>nyírószilárdságát</strong>. Ezt a <strong>Mohr–Coulomb-egyenes</strong> írja le: minél nagyobb a normálfeszültség, annál nagyobb nyírást bír el a talaj.</p>
+  <p class="lead">A talaj akkor nyíródik el, ha valamelyik síkon a nyírófeszültség eléri a talaj <strong>nyírószilárdságát</strong>. Ezt a <strong>Mohr–Coulomb-egyenes</strong> írja le: minél nagyobb a normálfeszültség, annál nagyobb nyírást bír el a talaj.</p>
   <div class="formula"><span class="f-tau">τ<sub>f</sub></span> = <span class="f-env">c′</span> + <span class="f-sig">σ′</span>·tan<span class="f-env">φ′</span>
-    <small><strong>c′</strong> a kohézió (a tengelymetszet), <strong>φ′</strong> a belső súrlódási szög (az egyenes meredeksége). A talaj <strong>akkor törik</strong>, amikor a Mohr-kör <strong>érinti</strong> ezt az egyenest. Ekkor: R = (σ₁+σ₃)/2·sinφ′ + c′·cosφ′.</small>
+    <small><strong>c′</strong> a kohézió (a függőleges tengelymetszet), <strong>φ′</strong> a belső súrlódási szög (az egyenes meredeksége). A talaj <strong>akkor törik</strong>, amikor a Mohr-kör <strong>érinti</strong> ezt az egyenest. Ekkor: R = (σ₁+σ₃)/2·sinφ′ + c′·cosφ′.</small>
   </div>
   <div class="panel">
     <div class="panel-title">Törés-szimulátor — feszítsd a mintát törésig</div>
@@ -224,7 +224,7 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
       </div>
     </div>
   </div>
-  <div class="note warn"><strong>A törési sík nem 45°-os!</strong> A minta nem a maximális nyírás (45°) síkján törik, hanem ott, ahol a kör érinti az egyenest: <strong>θ<sub>f</sub> = 45° + φ′/2</strong>. Súrlódó talajban (nagy φ′) a törési sík meredekebb.</div>
+  <div class="note warn"><strong>A törési sík nem 45°-os!</strong> A minta nem a maximális nyírás (45°) síkján törik, hanem ott, ahol a kör érinti az egyenest: <strong>θ<sub>f</sub> = 45° + φ′/2</strong>. Szemcsés talajban (nagy φ′) a törési sík meredekebb.</div>
 </section>
 
 <!-- ── 4. NYÍRÓSZILÁRDSÁG ── -->
@@ -260,7 +260,7 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
   </div>
   <table>
     <tr><th>Talaj / eset</th><th>φ′</th><th>c′ vagy c_u</th><th>Jellemző</th></tr>
-    <tr><td>Homok, kavics</td><td>30–40°</td><td>c′ ≈ 0</td><td>tisztán súrlódó</td></tr>
+    <tr><td>Homok, kavics</td><td>30–40°</td><td>c′ ≈ 0</td><td>tisztán szemcsés</td></tr>
     <tr><td>Iszap</td><td>27–34°</td><td>kis c′</td><td>átmeneti</td></tr>
     <tr><td>Agyag — drénezett</td><td>18–28°</td><td>kis c′</td><td>hatékony feszültség</td></tr>
     <tr><td>Agyag — drénezetlen</td><td>0°</td><td>c_u = 20–150 kPa</td><td>vízszintes burok</td></tr>
@@ -404,23 +404,23 @@ function circleSvg(s1,s3){
     $("k_r").textContent=fmt(R,0)+" kPa";
   }
   function elemDraw(th,s1,s3,sn,tau){
-    const cx=120,cy=120,L=64;
-    let s='<rect x="'+(cx-L)+'" y="'+(cy-L)+'" width="'+(2*L)+'" height="'+(2*L)+'" fill="#efe9df" stroke="#bba37e" stroke-width="1.5"/>';
-    // főfeszültség nyilak: σ1 függőleges, σ3 vízszintes
-    s+=arrow(cx,cy-L-22,cx,cy-L-4,'#7a5230',2.4)+arrow(cx,cy+L+22,cx,cy+L+4,'#7a5230',2.4);
-    s+='<text x="'+(cx+6)+'" y="'+(cy-L-12)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
-    s+=arrow(cx-L-22,cy,cx-L-4,cy,'#b08968',2.4)+arrow(cx+L+22,cy,cx+L+4,cy,'#b08968',2.4);
-    s+='<text x="'+(cx+L+6)+'" y="'+(cy-6)+'" font-family="JetBrains Mono" font-size="11" fill="#b08968">σ₃</text>';
+    const cx=120,cy=120,hw=40,hh=80; // 2:1 álló minta (magasság = 2× szélesség)
+    let s='<rect x="'+(cx-hw)+'" y="'+(cy-hh)+'" width="'+(2*hw)+'" height="'+(2*hh)+'" fill="#efe9df" stroke="#bba37e" stroke-width="1.5"/>';
+    // főfeszültség nyilak: σ1 függőleges (rövid végek), σ3 vízszintes (hosszú oldalak)
+    s+=arrow(cx,cy-hh-22,cx,cy-hh-4,'#7a5230',2.4)+arrow(cx,cy+hh+22,cx,cy+hh+4,'#7a5230',2.4);
+    s+='<text x="'+(cx+7)+'" y="'+(cy-hh-10)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    s+=arrow(cx-hw-22,cy,cx-hw-4,cy,'#b08968',2.4)+arrow(cx+hw+22,cy,cx+hw+4,cy,'#b08968',2.4);
+    s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="JetBrains Mono" font-size="11" fill="#b08968">σ₃</text>';
     // vizsgált sík: normálisa θ-t zár be a függőlegessel (σ1 iránnyal). A sík vonala merőleges a normálisra.
-    const a=rad(th); // a sík normálisának szöge a függőlegestől
-    // sík iránya = normális +90°. normális irány (sinθ, -cosθ) [képernyő y lefelé]
+    const a=rad(th);
     const nx=Math.sin(a),ny=-Math.cos(a);
-    const dx=ny,dy=-nx; // a sík menti irány (merőleges a normálisra)
-    const half=L*1.18;
-    const x1=cx-dx*half,y1=cy-dy*half,x2=cx+dx*half,y2=cy+dy*half;
+    const dx=ny,dy=-nx; // a sík menti irány
+    const tx=Math.abs(dx)>1e-6?hw/Math.abs(dx):1e9, ty=Math.abs(dy)>1e-6?hh/Math.abs(dy):1e9;
+    const t=Math.min(tx,ty); // a mintára vágva
+    const x1=cx-dx*t,y1=cy-dy*t,x2=cx+dx*t,y2=cy+dy*t;
     s+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="#0e7c6b" stroke-width="2.4"/>';
     // σn (normális mentén) és τ (sík mentén) nyilak a sík közepén
-    const ns=22*Math.min(1.2,sn/Math.max(s1,1))+8, ts=22*Math.min(1.2,Math.abs(tau)/Math.max((s1-s3)/2,1))+4;
+    const ns=20*Math.min(1.2,sn/Math.max(s1,1))+8, ts=20*Math.min(1.2,Math.abs(tau)/Math.max((s1-s3)/2,1))+4;
     s+=arrow(cx+nx*8,cy+ny*8,cx+nx*(8+ns),cy+ny*(8+ns),'#c2521f',2.2);
     s+='<text x="'+(cx+nx*(14+ns)).toFixed(1)+'" y="'+(cy+ny*(14+ns)).toFixed(1)+'" font-family="JetBrains Mono" font-size="10.5" fill="#c2521f">σₙ</text>';
     const tsign=tau>=0?1:-1;
@@ -480,32 +480,31 @@ function arrow(x1,y1,x2,y2,col,w){
     status.textContent=failed?"TÖRÉS — a minta elnyíródott":"STABIL — "+fmt(util*100,0)+"% kihasználtság";
   }
   function mintaDraw(thf,failed,util){
-    const cx=120,cy=120,L=58;
-    const a=rad(thf); // törési sík szöge a vízszintessel
-    const dx=Math.cos(a),dy=-Math.sin(a); // sík menti irány (felfelé jobbra)
-    // törésvonal a négyzeten át
-    const x1=cx-dx*L*1.5,y1=cy-dy*L*1.5,x2=cx+dx*L*1.5,y2=cy+dy*L*1.5;
+    const cx=120,cy=120,hw=38,hh=76; // 2:1 álló minta
+    const a=rad(thf);
+    const dx=Math.cos(a),dy=-Math.sin(a); // a törési sík iránya (felfelé jobbra)
+    let nx=-dy,ny=dx; if(ny>0){nx=-nx;ny=-ny;} // a sík normálisa felfelé mutat
+    const F=300;
+    const lx1=cx-dx*F,ly1=cy-dy*F,lx2=cx+dx*F,ly2=cy+dy*F;
     const fillCol=failed?'#f1d9d4':'#efe9df',strokeCol=failed?'#a32626':'#bba37e';
-    // felső csúszó ék (a vonal felett): eltolás a sík mentén ha törik
-    const slip=failed?14:0;
-    const sx=(dx*slip).toFixed(1),sy=(dy*slip).toFixed(1);
-    let s='';
-    // alsó (álló) rész — teljes négyzet háttér
-    s+='<rect x="'+(cx-L)+'" y="'+(cy-L)+'" width="'+(2*L)+'" height="'+(2*L)+'" fill="'+fillCol+'" stroke="'+strokeCol+'" stroke-width="1.5"/>';
-    // a felső ék külön (clip a négyzetre + a sík fölé) — egyszerűsítve: a teljes négyzet felső felét a vonal mentén csúsztatjuk
-    s+='<g'+(failed&&!reduced?' class="slip" style="--sx:'+sx+'px;--sy:'+sy+'px"':'')+(failed?' transform="translate('+sx+','+sy+')"':'')+'>';
-    s+='<clipPath id="upClip"><polygon points="'+(cx-L)+','+(cy-L)+' '+(cx+L)+','+(cy-L)+' '+x2.toFixed(1)+','+y2.toFixed(1)+' '+x1.toFixed(1)+','+y1.toFixed(1)+'"/></clipPath>';
-    s+='<rect x="'+(cx-L)+'" y="'+(cy-L)+'" width="'+(2*L)+'" height="'+(2*L)+'" fill="'+fillCol+'" stroke="'+strokeCol+'" stroke-width="1.5" clip-path="url(#upClip)"/>';
-    s+='</g>';
-    // törési sík vonala
-    s+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+(failed?'#a32626':'#0e7c6b')+'" stroke-width="2.4"'+(failed?'':' stroke-dasharray="5 4"')+'/>';
-    // főfeszültség nyilak
-    s+=arrow(cx,cy-L-20,cx,cy-L-3,'#7a5230',2.4)+arrow(cx,cy+L+20,cx,cy+L+3,'#7a5230',2.4);
-    s+='<text x="'+(cx+6)+'" y="'+(cy-L-10)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
-    s+=arrow(cx-L-20,cy,cx-L-3,cy,'#b08968',2.2)+arrow(cx+L+20,cy,cx+L+3,cy,'#b08968',2.2);
-    // törési sík szöge
-    s+='<text x="'+(cx-L+4)+'" y="'+(cy+L-6)+'" font-family="JetBrains Mono" font-size="10.5" fill="'+(failed?'#a32626':'#0e7c6b')+'">θ_f='+fmt(thf,0)+'°</text>';
-    if(failed){s+='<text x="'+cx+'" y="'+(cy-L-30)+'" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">TÖRÉS</text>';}
+    const slip=failed?13:0; const sx=(dx*slip).toFixed(1),sy=(dy*slip).toFixed(1);
+    // felső fél-sík poligon (a törési vonal fölött), a mintára vágva
+    const upPoly=lx1.toFixed(1)+','+ly1.toFixed(1)+' '+lx2.toFixed(1)+','+ly2.toFixed(1)+' '+(lx2+nx*F).toFixed(1)+','+(ly2+ny*F).toFixed(1)+' '+(lx1+nx*F).toFixed(1)+','+(ly1+ny*F).toFixed(1);
+    const grp=failed?(reduced?' transform="translate('+sx+','+sy+')"':' class="slip" style="--sx:'+sx+'px;--sy:'+sy+'px"'):'';
+    let s='<defs><clipPath id="mRect"><rect x="'+(cx-hw)+'" y="'+(cy-hh)+'" width="'+(2*hw)+'" height="'+(2*hh)+'"/></clipPath><clipPath id="mUp"><polygon points="'+upPoly+'"/></clipPath></defs>';
+    // teljes (álló) minta
+    s+='<rect x="'+(cx-hw)+'" y="'+(cy-hh)+'" width="'+(2*hw)+'" height="'+(2*hh)+'" fill="'+fillCol+'" stroke="'+strokeCol+'" stroke-width="1.5"/>';
+    // felső ék — a törési sík fölötti rész, töréskor elcsúszik
+    s+='<g'+grp+'><g clip-path="url(#mUp)"><rect x="'+(cx-hw)+'" y="'+(cy-hh)+'" width="'+(2*hw)+'" height="'+(2*hh)+'" fill="'+fillCol+'" stroke="'+strokeCol+'" stroke-width="1.5" clip-path="url(#mRect)"/></g></g>';
+    // törési sík vonala (a mintára vágva)
+    s+='<line x1="'+lx1.toFixed(1)+'" y1="'+ly1.toFixed(1)+'" x2="'+lx2.toFixed(1)+'" y2="'+ly2.toFixed(1)+'" stroke="'+(failed?'#a32626':'#0e7c6b')+'" stroke-width="2.4"'+(failed?'':' stroke-dasharray="5 4"')+' clip-path="url(#mRect)"/>';
+    // főfeszültség nyilak: σ1 a rövid végeken, σ3 a hosszú oldalakon
+    s+=arrow(cx,cy-hh-20,cx,cy-hh-3,'#7a5230',2.4)+arrow(cx,cy+hh+20,cx,cy+hh+3,'#7a5230',2.4);
+    s+='<text x="'+(cx+7)+'" y="'+(cy-hh-9)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    s+=arrow(cx-hw-20,cy,cx-hw-3,cy,'#b08968',2.2)+arrow(cx+hw+20,cy,cx+hw+3,cy,'#b08968',2.2);
+    s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="JetBrains Mono" font-size="10.5" fill="#b08968">σ₃</text>';
+    s+='<text x="'+(cx-hw+2)+'" y="'+(cy+hh-6)+'" font-family="JetBrains Mono" font-size="10.5" fill="'+(failed?'#a32626':'#0e7c6b')+'">θ_f='+fmt(thf,0)+'°</text>';
+    if(failed){s+='<text x="'+cx+'" y="'+(cy-hh-28)+'" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">TÖRÉS</text>';}
     return s;
   }
   ["t_s1","t_s3","t_ph","t_c"].forEach(id=>$(id).addEventListener('input',draw));
@@ -577,8 +576,8 @@ function arrow(x1,y1,x2,y2,col,w){
     {q:"Melyik síkon a legnagyobb a nyírófeszültség?",o:["A főfeszültségi síkon (θ=0°)","θ=30°-nál","θ=45°-nál (a kör teteje)","θ=90°-nál"],c:2,e:"τ_max = R a θ=45°-os síkon — ez a kör legmagasabb pontja. De a talaj nem feltétlenül itt törik!"},
     {q:"A Mohr–Coulomb törési feltétel:",o:["τ_f = c′ + σ′·tanφ′","τ_f = c′ − σ′·tanφ′","σ′ = c′ + τ·tanφ′","τ_f = σ′ / tanφ′"],c:0,e:"A nyírószilárdság a kohézióból (c′) és a normálfeszültséggel arányos súrlódásból (σ′·tanφ′) tevődik össze."},
     {q:"Mikor törik a talaj a Mohr-diagramon?",o:["Amikor a kör középpontja eléri az egyenest","Amikor a kör érinti a burkológörbét","Amikor a kör teljesen az egyenes fölé kerül","Amikor σ₃ = 0"],c:1,e:"A törés az érintés pillanata: ekkor egyetlen síkon a nyírófeszültség épp eléri a szilárdságot."},
-    {q:"Mekkora a törési sík szöge a főfeszültség síkjához képest?",o:["45°","45° + φ′/2","φ′","90° − φ′"],c:1,e:"θ_f = 45° + φ′/2. Súrlódó talajban (nagy φ′) a törési sík meredekebb, mint a maximális nyírás 45°-os síkja."},
-    {q:"Tisztán súrlódó talaj (homok) burkológörbéje:",o:["Vízszintes egyenes","Az origóból induló ferde egyenes (c′=0)","Függőleges egyenes","Görbe vonal"],c:1,e:"Homokban c′≈0, így a burkológörbe az origóból indul: τ_f = σ′·tanφ′."},
+    {q:"Mekkora a törési sík szöge a főfeszültség síkjához képest?",o:["45°","45° + φ′/2","φ′","90° − φ′"],c:1,e:"θ_f = 45° + φ′/2. Szemcsés talajban (nagy φ′) a törési sík meredekebb, mint a maximális nyírás 45°-os síkja."},
+    {q:"Tisztán szemcsés talaj (homok) burkológörbéje:",o:["Vízszintes egyenes","Az origóból induló ferde egyenes (c′=0)","Függőleges egyenes","Görbe vonal"],c:1,e:"Homokban c′≈0, így a burkológörbe az origóból indul: τ_f = σ′·tanφ′."},
     {q:"Drénezetlen telített agyag burkológörbéje a teljes feszültségek terében:",o:["Meredek ferde egyenes","Vízszintes egyenes τ = c_u (φ=0)","Az origóból indul","Negatív meredekségű"],c:1,e:"Drénezetlen esetben φ=0, a szilárdság a cellanyomástól függetlenül állandó c_u — a burok vízszintes."},
     {q:"Miért φ=0 a drénezetlen telített agyag?",o:["Mert nincs súrlódás a szemcsék közt","Mert a cellanyomás-növekmény a pórusvízre megy, a hatékony feszültség nem változik","Mert az agyag nem visel nyírást","Mert c_u nagyon nagy"],c:1,e:"Telített, zárt rendszerben Δσ teljes egészében Δu lesz, így σ′ és a deviátorfeszültség a cellanyomástól független — a kör mérete állandó."},
     {q:"Ha nő a normálfeszültség σ′ a síkon, a nyírószilárdság:",o:["Csökken","Nő (a súrlódás miatt)","Nem változik","Zérusra esik"],c:1,e:"A nagyobb normálfeszültség nagyobb szemcseközi súrlódást, így nagyobb nyírószilárdságot ad — ezt fejezi ki a σ′·tanφ′ tag."},
