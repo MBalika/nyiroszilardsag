@@ -414,7 +414,7 @@ function circleSvg(s1,s3){
     // főfeszültség nyilak: σ1 függőleges (rövid végek), σ3 vízszintes (hosszú oldalak)
     s+=arrow(cx,cy-hh-22,cx,cy-hh-4,'#7a5230',2.4)+arrow(cx,cy+hh+22,cx,cy+hh+4,'#7a5230',2.4);
     s+='<text x="'+(cx+7)+'" y="'+(cy-hh-10)+'" font-family="Inter" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
-    s+='<text x="'+(cx+7)+'" y="'+(cy+hh+32)+'" font-family="Inter" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
+    s+='<text x="'+(cx+7)+'" y="'+(cy+hh+16)+'" font-family="Inter" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
     s+=arrow(cx-hw-22,cy,cx-hw-4,cy,'#b08968',2.4)+arrow(cx+hw+22,cy,cx+hw+4,cy,'#b08968',2.4);
     s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="Inter" font-size="11" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
     s+='<text x="'+(cx-hw-8)+'" y="'+(cy-6)+'" text-anchor="end" font-family="Inter" font-size="11" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
@@ -509,7 +509,7 @@ function arrow(x1,y1,x2,y2,col,w){
     // főfeszültség nyilak: σ1 a rövid végeken, σ3 a hosszú oldalakon
     s+=arrow(cx,cy-hh-20,cx,cy-hh-3,'#7a5230',2.4)+arrow(cx,cy+hh+20,cx,cy+hh+3,'#7a5230',2.4);
     s+='<text x="'+(cx+7)+'" y="'+(cy-hh-9)+'" font-family="Inter" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
-    s+='<text x="'+(cx+7)+'" y="'+(cy+hh+31)+'" font-family="Inter" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
+    s+='<text x="'+(cx+7)+'" y="'+(cy+hh+15)+'" font-family="Inter" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
     s+=arrow(cx-hw-20,cy,cx-hw-3,cy,'#b08968',2.2)+arrow(cx+hw+20,cy,cx+hw+3,cy,'#b08968',2.2);
     s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="Inter" font-size="10.5" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
     s+='<text x="'+(cx-hw-8)+'" y="'+(cy-6)+'" text-anchor="end" font-family="Inter" font-size="10.5" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
