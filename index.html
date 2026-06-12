@@ -176,10 +176,10 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
       <div>
         <div class="svg-wrap"><svg id="elemSvg" viewBox="0 0 240 240" role="img" aria-label="Talajelem a vizsgált síkkal"></svg></div>
         <div class="readouts">
-          <div class="chip sig">σ<sub>n</sub> <b id="k_sn">—</b></div>
-          <div class="chip tau">τ <b id="k_tau">—</b></div>
-          <div class="chip acc">közép <b id="k_c">—</b></div>
-          <div class="chip">sugár R <b id="k_r">—</b></div>
+          <div class="chip sig">σ<sub>n</sub> = <b id="k_sn">—</b></div>
+          <div class="chip tau">τ = <b id="k_tau">—</b></div>
+          <div class="chip acc">közép = <b id="k_c">—</b></div>
+          <div class="chip">sugár R = <b id="k_r">—</b></div>
         </div>
       </div>
     </div>
@@ -216,9 +216,9 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
       <div>
         <div class="svg-wrap"><svg id="mintaSvg" viewBox="0 0 240 240" role="img" aria-label="Talajminta törési síkkal"></svg></div>
         <div class="readouts">
-          <div class="chip acc">Kihasználtság <b id="t_util">—</b></div>
-          <div class="chip">Törési sík <b id="t_ang">—</b></div>
-          <div class="chip sig">σ₁ töréskor <b id="t_s1f">—</b></div>
+          <div class="chip acc">Kihasználtság = <b id="t_util">—</b></div>
+          <div class="chip">Törési sík = <b id="t_ang">—</b></div>
+          <div class="chip sig">σ<sub>1</sub> töréskor = <b id="t_s1f">—</b></div>
         </div>
         <div class="statusbar safe" id="t_status">STABIL</div>
       </div>
@@ -248,9 +248,9 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
     </div>
     <div class="svg-wrap"><svg id="esetSvg" viewBox="0 0 880 320" role="img" aria-label="Drénezett és drénezetlen burkológörbe összevetése"></svg></div>
     <div class="readouts">
-      <div class="chip acc">Tönkremeneteli σ₁ <b id="e_s1">—</b></div>
-      <div class="chip">Deviátor (σ₁−σ₃) <b id="e_dev">—</b></div>
-      <div class="chip">Törési sík <b id="e_ang">—</b></div>
+      <div class="chip acc">Tönkremeneteli σ<sub>1</sub> = <b id="e_s1">—</b></div>
+      <div class="chip">Deviátor (σ<sub>1</sub>−σ<sub>3</sub>) = <b id="e_dev">—</b></div>
+      <div class="chip">Törési sík = <b id="e_ang">—</b></div>
     </div>
   </div>
   <div class="cards">
@@ -341,8 +341,8 @@ function circleSvg(s1,s3){
     '<circle cx="'+SX(C).toFixed(1)+'" cy="'+PLOT.yAxis+'" r="2.6" fill="#34514f"/>'+
     '<circle cx="'+SX(s3).toFixed(1)+'" cy="'+PLOT.yAxis+'" r="3.2" fill="#7a5230"/>'+
     '<circle cx="'+SX(s1).toFixed(1)+'" cy="'+PLOT.yAxis+'" r="3.2" fill="#7a5230"/>'+
-    '<text x="'+SX(s3).toFixed(1)+'" y="'+(PLOT.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₃</text>'+
-    '<text x="'+SX(s1).toFixed(1)+'" y="'+(PLOT.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    '<text x="'+SX(s3).toFixed(1)+'" y="'+(PLOT.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">3</tspan></text>'+
+    '<text x="'+SX(s1).toFixed(1)+'" y="'+(PLOT.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
 }
 
 /* ════ HERO mini-animáció ════ */
@@ -392,7 +392,7 @@ function circleSvg(s1,s3){
     g+='<line x1="'+px.toFixed(1)+'" y1="'+py.toFixed(1)+'" x2="'+px.toFixed(1)+'" y2="'+PLOT.yAxis+'" stroke="#c2521f" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>';
     g+='<line x1="'+px.toFixed(1)+'" y1="'+py.toFixed(1)+'" x2="'+PLOT.x0+'" y2="'+py.toFixed(1)+'" stroke="#c2521f" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>';
     g+='<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="5" fill="#c2521f"/>';
-    g+='<text x="'+(px+9).toFixed(1)+'" y="'+(py-6).toFixed(1)+'" font-family="JetBrains Mono" font-size="11" fill="#c2521f">(σₙ, τ)</text>';
+    g+='<text x="'+(px+9).toFixed(1)+'" y="'+(py-6).toFixed(1)+'" font-family="JetBrains Mono" font-size="11" fill="#c2521f">(σ<tspan dy="2.5" font-size="8">n</tspan><tspan dy="-2.5">, τ)</tspan></text>';
     // 2θ ív felirat
     g+='<text x="'+(SX(C)+14).toFixed(1)+'" y="'+(PLOT.yAxis-8)+'" font-family="JetBrains Mono" font-size="10.5" fill="#64807d">2θ='+(2*th)+'°</text>';
     svg.innerHTML=g;
@@ -408,9 +408,9 @@ function circleSvg(s1,s3){
     let s='<rect x="'+(cx-hw)+'" y="'+(cy-hh)+'" width="'+(2*hw)+'" height="'+(2*hh)+'" fill="#efe9df" stroke="#bba37e" stroke-width="1.5"/>';
     // főfeszültség nyilak: σ1 függőleges (rövid végek), σ3 vízszintes (hosszú oldalak)
     s+=arrow(cx,cy-hh-22,cx,cy-hh-4,'#7a5230',2.4)+arrow(cx,cy+hh+22,cx,cy+hh+4,'#7a5230',2.4);
-    s+='<text x="'+(cx+7)+'" y="'+(cy-hh-10)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    s+='<text x="'+(cx+7)+'" y="'+(cy-hh-10)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
     s+=arrow(cx-hw-22,cy,cx-hw-4,cy,'#b08968',2.4)+arrow(cx+hw+22,cy,cx+hw+4,cy,'#b08968',2.4);
-    s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="JetBrains Mono" font-size="11" fill="#b08968">σ₃</text>';
+    s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="JetBrains Mono" font-size="11" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
     // vizsgált sík: normálisa θ-t zár be a függőlegessel (σ1 iránnyal). A sík vonala merőleges a normálisra.
     const a=rad(th);
     const nx=Math.sin(a),ny=-Math.cos(a);
@@ -422,7 +422,7 @@ function circleSvg(s1,s3){
     // σn (normális mentén) és τ (sík mentén) nyilak a sík közepén
     const ns=20*Math.min(1.2,sn/Math.max(s1,1))+8, ts=20*Math.min(1.2,Math.abs(tau)/Math.max((s1-s3)/2,1))+4;
     s+=arrow(cx+nx*8,cy+ny*8,cx+nx*(8+ns),cy+ny*(8+ns),'#c2521f',2.2);
-    s+='<text x="'+(cx+nx*(14+ns)).toFixed(1)+'" y="'+(cy+ny*(14+ns)).toFixed(1)+'" font-family="JetBrains Mono" font-size="10.5" fill="#c2521f">σₙ</text>';
+    s+='<text x="'+(cx+nx*(14+ns)).toFixed(1)+'" y="'+(cy+ny*(14+ns)).toFixed(1)+'" font-family="JetBrains Mono" font-size="10.5" fill="#c2521f">σ<tspan dy="2.5" font-size="8">n</tspan></text>';
     const tsign=tau>=0?1:-1;
     s+=arrow(cx,cy,cx+dx*ts*tsign,cy+dy*ts*tsign,'#0e7c6b',2.2);
     s+='<text x="'+(cx+dx*(ts+10)*tsign).toFixed(1)+'" y="'+(cy+dy*(ts+10)*tsign).toFixed(1)+'" font-family="JetBrains Mono" font-size="10.5" fill="#0e7c6b">τ</text>';
@@ -472,7 +472,7 @@ function arrow(x1,y1,x2,y2,col,w){
     const thf=45+phi/2;
     minta.innerHTML=mintaDraw(thf,failed,util);
     $("t_util").textContent=fmt(Math.min(util*100,999),0)+" %";
-    $("t_ang").textContent="θ_f = "+fmt(thf,1)+"°";
+    $("t_ang").textContent=fmt(thf,1)+"°";
     const Kp=Math.pow(Math.tan(rad(45+phi/2)),2);
     const s1f=s3*Kp+2*coh*Math.sqrt(Kp);
     $("t_s1f").textContent=fmt(s1f,0)+" kPa";
@@ -500,9 +500,9 @@ function arrow(x1,y1,x2,y2,col,w){
     s+='<line x1="'+lx1.toFixed(1)+'" y1="'+ly1.toFixed(1)+'" x2="'+lx2.toFixed(1)+'" y2="'+ly2.toFixed(1)+'" stroke="'+(failed?'#a32626':'#0e7c6b')+'" stroke-width="2.4"'+(failed?'':' stroke-dasharray="5 4"')+' clip-path="url(#mRect)"/>';
     // főfeszültség nyilak: σ1 a rövid végeken, σ3 a hosszú oldalakon
     s+=arrow(cx,cy-hh-20,cx,cy-hh-3,'#7a5230',2.4)+arrow(cx,cy+hh+20,cx,cy+hh+3,'#7a5230',2.4);
-    s+='<text x="'+(cx+7)+'" y="'+(cy-hh-9)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    s+='<text x="'+(cx+7)+'" y="'+(cy-hh-9)+'" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
     s+=arrow(cx-hw-20,cy,cx-hw-3,cy,'#b08968',2.2)+arrow(cx+hw+20,cy,cx+hw+3,cy,'#b08968',2.2);
-    s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="JetBrains Mono" font-size="10.5" fill="#b08968">σ₃</text>';
+    s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="JetBrains Mono" font-size="10.5" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
     s+='<text x="'+(cx-hw+2)+'" y="'+(cy+hh-6)+'" font-family="JetBrains Mono" font-size="10.5" fill="'+(failed?'#a32626':'#0e7c6b')+'">θ_f='+fmt(thf,0)+'°</text>';
     if(failed){s+='<text x="'+cx+'" y="'+(cy-hh-28)+'" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">TÖRÉS</text>';}
     return s;
@@ -555,14 +555,14 @@ function arrow(x1,y1,x2,y2,col,w){
     g+='<text x="'+X(xEnd*0.5).toFixed(1)+'" y="'+(Y(coh+xEnd*0.5*tanp)-8).toFixed(1)+'" font-family="JetBrains Mono" font-size="12" fill="#1b6fae">'+(dr?'τ = c′ + σ·tanφ′':'τ = c_u (φ=0)')+'</text>';
     // tönkremeneteli kör (érinti a burkot)
     g+='<circle cx="'+X(C).toFixed(1)+'" cy="'+P.yAxis+'" r="'+(R*P.s).toFixed(1)+'" fill="rgba(14,124,107,0.08)" stroke="#0e7c6b" stroke-width="2.2"/>';
-    g+='<circle cx="'+X(s3).toFixed(1)+'" cy="'+P.yAxis+'" r="3" fill="#7a5230"/><text x="'+X(s3).toFixed(1)+'" y="'+(P.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₃</text>';
-    g+='<circle cx="'+X(s1).toFixed(1)+'" cy="'+P.yAxis+'" r="3" fill="#7a5230"/><text x="'+X(s1).toFixed(1)+'" y="'+(P.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ₁</text>';
+    g+='<circle cx="'+X(s3).toFixed(1)+'" cy="'+P.yAxis+'" r="3" fill="#7a5230"/><text x="'+X(s3).toFixed(1)+'" y="'+(P.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
+    g+='<circle cx="'+X(s1).toFixed(1)+'" cy="'+P.yAxis+'" r="3" fill="#7a5230"/><text x="'+X(s1).toFixed(1)+'" y="'+(P.yAxis+30)+'" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">1</tspan></text>';
     const tpx=C-R*Math.sin(rad(phi)),tpy=R*Math.cos(rad(phi));
     g+='<circle cx="'+X(tpx).toFixed(1)+'" cy="'+Y(tpy).toFixed(1)+'" r="4.5" fill="#a32626" stroke="#fff" stroke-width="1"/>';
     svg.innerHTML=g;
     $("e_s1").textContent=fmt(s1,0)+" kPa";
     $("e_dev").textContent=fmt(s1-s3,0)+" kPa";
-    $("e_ang").textContent="θ_f = "+fmt(thf,1)+"°";
+    $("e_ang").textContent=fmt(thf,1)+"°";
   }
   ["e_mode","e_s3","e_ph","e_cu"].forEach(id=>$(id).addEventListener('input',draw));
   draw();
