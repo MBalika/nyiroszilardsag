@@ -133,7 +133,7 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
 <header class="hero">
   <div class="hero-eyebrow">Talajmechanika · Interaktív segédanyag</div>
   <h1>Mohr-kör<br><span class="thin">— amíg a talaj el nem törik</span></h1>
-  <p class="hero-sub">Egy talajelemben minden síkon más a <strong>normál-</strong> és a <strong>nyírófeszültség</strong>. A Mohr-kör ezt az egész feszültségállapotot egyetlen körré sűríti — és ha a kör eléri a <strong>törési burkológörbét</strong>, a talaj megnyíródik. Állítsd a csúszókat, és nézd élőben.</p>
+  <p class="hero-sub">Egy talajelemben minden síkon más a <strong>normál-</strong> és a <strong>nyírófeszültség</strong>. A Mohr-kör ezt az egész feszültségállapotot egyetlen körré sűríti — és ha a kör eléri a <strong>törési burkológörbét</strong>, a talaj elnyíródik. Állítsd a csúszkákat, és nézd élőben.</p>
   <div class="hero-fig">
     <svg id="heroSvg" viewBox="0 0 190 150" width="190" height="150" role="img" aria-label="Növekvő Mohr-kör, amely eléri a törési egyenest"></svg>
     <div class="cap">A kör <b style="color:var(--accent)">nő</b> a teher növekedésével — amint érinti a <b style="color:var(--water)">burkológörbét</b>, a minta <b style="color:var(--danger)">törik</b>. Aztán elölről.</div>
@@ -149,7 +149,7 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
   <p class="lead">Ha a talajban egy képzeletbeli síkot veszünk fel, a rá ható feszültséget két részre bontjuk: a síkra <strong>merőleges normálfeszültségre (σ)</strong> és a síkkal <strong>párhuzamos nyírófeszültségre (τ)</strong>. A talaj törését szinte mindig a <strong>nyírás</strong> okozza — a szemcsék egymáson elcsúsznak.</p>
   <div class="cards">
     <div class="card"><h4><span class="dot sig"></span>Normálfeszültség σ</h4><p>A síkra merőleges összenyomó feszültség. Növeli a szemcsék közti súrlódást — <em>segít</em> ellenállni a nyírásnak.</p></div>
-    <div class="card"><h4><span class="dot tau"></span>Nyírófeszültség τ</h4><p>A síkkal párhuzamos, elcsúsztató feszültség. Ez <em>hajtja</em> a törést. Amikor τ túl nagy lesz σ-hoz képest, a talaj megnyíródik.</p></div>
+    <div class="card"><h4><span class="dot tau"></span>Nyírófeszültség τ</h4><p>A síkkal párhuzamos, elcsúsztató feszültség. Ez <em>hajtja</em> a törést. Amikor τ túl nagy lesz σ-hoz képest, a talaj elnyíródik.</p></div>
     <div class="card"><h4><span class="dot accent"></span>Főfeszültségek σ₁, σ₃</h4><p>Mindig van két egymásra merőleges sík, amelyen a nyírás zérus — ezeken hat a legnagyobb (σ₁) és a legkisebb (σ₃) normálfeszültség. Köztük forog minden más sík.</p></div>
   </div>
   <div class="formula">σ<sub>n</sub> = <span class="f-sig">(σ₁+σ₃)/2</span> + <span class="f-sig">(σ₁−σ₃)/2</span>·cos2θ &nbsp;&nbsp; τ = <span class="f-tau">(σ₁−σ₃)/2</span>·sin2θ
@@ -197,7 +197,7 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
   </div>
   <div class="panel">
     <div class="panel-title">Törés-szimulátor — feszítsd a mintát törésig</div>
-    <div class="panel-sub">Növeld σ₁-et (vagy csökkentsd σ₃-at, c′-t, φ′-t), amíg a kör eléri a kék egyenest. Akkor a minta megnyíródik a <strong>törési sík</strong> mentén.</div>
+    <div class="panel-sub">Növeld σ₁-et (vagy csökkentsd σ₃-at, c′-t, φ′-t), amíg a kör eléri a kék egyenest. Akkor a minta elnyíródik a <strong>törési sík</strong> mentén.</div>
     <div class="controls">
       <div class="ctrl"><label>σ₁ <span class="val" id="t_s1v">240 kPa</span></label><input type="range" id="t_s1" min="40" max="500" step="5" value="240"></div>
       <div class="ctrl"><label>σ₃ <span class="val" id="t_s3v">80 kPa</span></label><input type="range" id="t_s3" min="0" max="400" step="5" value="80"></div>
@@ -477,7 +477,7 @@ function arrow(x1,y1,x2,y2,col,w){
     const s1f=s3*Kp+2*coh*Math.sqrt(Kp);
     $("t_s1f").textContent=fmt(s1f,0)+" kPa";
     status.className="statusbar "+(failed?"fail":"safe");
-    status.textContent=failed?"TÖRÉS — a minta megnyíródott":"STABIL — "+fmt(util*100,0)+"% kihasználtság";
+    status.textContent=failed?"TÖRÉS — a minta elnyíródott":"STABIL — "+fmt(util*100,0)+"% kihasználtság";
   }
   function mintaDraw(thf,failed,util){
     const cx=120,cy=120,L=58;
