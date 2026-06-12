@@ -465,7 +465,8 @@ function arrow(x1,y1,x2,y2,col,w){
     // tükör (alsó) burkológörbe halványan
     g+='<line x1="'+SX(0).toFixed(1)+'" y1="'+SY(-coh).toFixed(1)+'" x2="'+SX(xEnd).toFixed(1)+'" y2="'+SY(-yEnd).toFixed(1)+'" stroke="'+envCol+'" stroke-width="1.2" opacity="0.35"/>';
     if(coh>0){g+='<text x="'+(PLOT.x0-6)+'" y="'+SY(coh).toFixed(1)+'" text-anchor="end" font-family="Inter" font-size="10" fill="'+envCol+'">c′</text>';}
-    g+='<text x="'+SX(xEnd*0.62).toFixed(1)+'" y="'+(SY(coh+xEnd*0.62*tanp)-6).toFixed(1)+'" font-family="Inter" font-size="11" fill="'+envCol+'">φ′='+phi+'°</text>';
+    var plx=SX(xEnd*0.62), ply=SY(coh+xEnd*0.62*tanp)-15;
+    g+='<text x="'+plx.toFixed(1)+'" y="'+ply.toFixed(1)+'" text-anchor="middle" font-family="Inter" font-size="11" fill="'+envCol+'" transform="rotate('+(-deg(Math.atan(tanp))).toFixed(1)+' '+plx.toFixed(1)+' '+ply.toFixed(1)+')">φ′='+phi+'°</text>';
     // érintési (törési) pont a körön: σ=C-R sinφ, τ=R cosφ
     if(R>0.5){
       const tpx=C-R*Math.sin(rad(phi)),tpy=R*Math.cos(rad(phi));
