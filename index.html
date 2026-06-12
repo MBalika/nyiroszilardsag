@@ -54,7 +54,7 @@ p strong{color:var(--ink)}
 .card p{font-size:.92rem;margin:0;color:var(--ink2)}
 .dot{width:10px;height:10px;border-radius:50%;flex:none}
 .dot.sig{background:var(--eff)} .dot.tau{background:var(--pore)} .dot.env{background:var(--water)} .dot.accent{background:var(--accent)} .dot.danger{background:var(--danger)}
-.formula{font-family:var(--mono);background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:.9rem 1.2rem;margin:1.2rem 0;font-size:.98rem;overflow-x:auto;white-space:nowrap;}
+.formula{font-family:var(--body);background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:.9rem 1.2rem;margin:1.2rem 0;font-size:.98rem;overflow-x:auto;white-space:nowrap;}
 .formula small{display:block;font-family:var(--body);color:var(--ink3);font-size:.82rem;white-space:normal;margin-top:.4rem}
 .f-sig{color:var(--eff);font-weight:600} .f-tau{color:var(--pore);font-weight:600} .f-env{color:var(--water);font-weight:600} .f-acc{color:var(--accent);font-weight:600}
 .note{background:var(--accent-soft);border:1px solid #bcdcd2;border-radius:10px;padding:.9rem 1.2rem;margin:1.2rem 0;font-size:.95rem;color:var(--ink2);}
@@ -66,7 +66,7 @@ p strong{color:var(--ink)}
 .panel-sub{font-size:.88rem;color:var(--ink3);margin-bottom:1rem}
 .controls{display:flex;flex-wrap:wrap;gap:1rem 1.6rem;align-items:flex-end;margin-bottom:1rem}
 .ctrl{display:flex;flex-direction:column;gap:.3rem;min-width:150px;flex:1}
-.ctrl label{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3)}
+.ctrl label{font-family:var(--body);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3)}
 .ctrl .val{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:600}
 input[type=range]{width:100%;accent-color:var(--accent);height:26px}
 select{font-family:var(--mono);font-size:14px;padding:.45rem .6rem;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:100%;}
@@ -81,14 +81,15 @@ select{font-family:var(--mono);font-size:14px;padding:.45rem .6rem;border:1px so
 .split{display:grid;grid-template-columns:1.15fr .85fr;gap:1.2rem;align-items:start}
 @media(max-width:760px){.split{grid-template-columns:1fr}}
 .readouts{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
-.chip{font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:.45rem .7rem;color:var(--ink2);}
+.chip{font-family:var(--body);font-size:12.5px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:.45rem .7rem;color:var(--ink2);}
+.chip b{font-family:var(--mono)}
 .chip b{color:var(--ink);font-weight:600}
 .chip.tau b{color:var(--pore)} .chip.sig b{color:var(--eff)} .chip.acc b{color:var(--accent)} .chip.env b{color:var(--water)}
 .statusbar{margin-top:1rem;border-radius:10px;padding:.7rem 1rem;font-family:var(--display);font-weight:700;font-size:1rem;text-align:center;border:1px solid var(--line);transition:background .2s,color .2s}
 .statusbar.safe{background:var(--accent-soft);color:var(--ok);border-color:#bcdcd2}
 .statusbar.fail{background:var(--danger-soft);color:var(--danger);border-color:#e7bcbc}
 table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.93rem;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-th,td{padding:.55rem .9rem;border-bottom:1px solid var(--line);text-align:center;font-family:var(--mono);font-size:.88rem}
+th,td{padding:.55rem .9rem;border-bottom:1px solid var(--line);text-align:center;font-family:var(--body);font-size:.88rem}
 th{background:var(--accent-soft);color:var(--ink);font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.03em}
 tr:last-child td{border-bottom:none}
 .quiz-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.6rem;margin:1.6rem 0}
@@ -244,7 +245,7 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
       </div>
       <div class="ctrl"><label>σ₃ (cellanyomás) <span class="val" id="e_s3v">80 kPa</span></label><input type="range" id="e_s3" min="0" max="300" step="5" value="80"></div>
       <div class="ctrl" id="e_drwrap"><label>φ′ / c′ <span class="val" id="e_drv">28° / 8 kPa</span></label><input type="range" id="e_ph" min="0" max="42" step="1" value="28"></div>
-      <div class="ctrl" id="e_udwrap" style="display:none"><label>c_u — drénezetlen szilárdság <span class="val" id="e_cuv">60 kPa</span></label><input type="range" id="e_cu" min="10" max="160" step="5" value="60"></div>
+      <div class="ctrl" id="e_udwrap" style="display:none"><label>c<sub>u</sub> — drénezetlen szilárdság <span class="val" id="e_cuv">60 kPa</span></label><input type="range" id="e_cu" min="10" max="160" step="5" value="60"></div>
     </div>
     <div class="svg-wrap"><svg id="esetSvg" viewBox="0 0 880 320" role="img" aria-label="Drénezett és drénezetlen burkológörbe összevetése"></svg></div>
     <div class="readouts">
@@ -259,11 +260,11 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
     <div class="card"><h4><span class="dot accent"></span>Miért φ = 0?</h4><p>Telített talajban a cellanyomás teljes egészében a pórusvízre megy, a <strong>hatékony</strong> feszültség nem változik — így a deviátorfeszültség a cellanyomástól függetlenül ugyanaz: a kör mérete állandó.</p></div>
   </div>
   <table>
-    <tr><th>Talaj / eset</th><th>φ′</th><th>c′ vagy c_u</th><th>Jellemző</th></tr>
+    <tr><th>Talaj / eset</th><th>φ′</th><th>c′ vagy c<sub>u</sub></th><th>Jellemző</th></tr>
     <tr><td>Homok, kavics</td><td>30–40°</td><td>c′ ≈ 0</td><td>tisztán szemcsés</td></tr>
     <tr><td>Iszap</td><td>27–34°</td><td>kis c′</td><td>átmeneti</td></tr>
     <tr><td>Agyag — drénezett</td><td>18–28°</td><td>kis c′</td><td>hatékony feszültség</td></tr>
-    <tr><td>Agyag — drénezetlen</td><td>0°</td><td>c_u = 20–150 kPa</td><td>vízszintes burok</td></tr>
+    <tr><td>Agyag — drénezetlen</td><td>0°</td><td>c<sub>u</sub> = 20–150 kPa</td><td>vízszintes burok</td></tr>
   </table>
 </section>
 
@@ -552,7 +553,7 @@ function arrow(x1,y1,x2,y2,col,w){
     // burkológörbe
     const tanp=Math.tan(rad(phi)), xEnd=( (P.xMax-P.x0)/P.s );
     g+='<line x1="'+X(0)+'" y1="'+Y(coh).toFixed(1)+'" x2="'+X(xEnd).toFixed(1)+'" y2="'+Y(coh+xEnd*tanp).toFixed(1)+'" stroke="#1b6fae" stroke-width="2.6"/>';
-    g+='<text x="'+X(xEnd*0.5).toFixed(1)+'" y="'+(Y(coh+xEnd*0.5*tanp)-8).toFixed(1)+'" font-family="Inter" font-size="12" fill="#1b6fae">'+(dr?'τ = c′ + σ·tanφ′':'τ = c_u (φ=0)')+'</text>';
+    g+='<text x="'+X(xEnd*0.5).toFixed(1)+'" y="'+(Y(coh+xEnd*0.5*tanp)-8).toFixed(1)+'" font-family="Inter" font-size="12" fill="#1b6fae">'+(dr?'τ = c′ + σ·tanφ′':'τ = c<tspan dy="2.5" font-size="8">u</tspan> (φ=0)')+'</text>';
     // tönkremeneteli kör (érinti a burkot)
     g+='<circle cx="'+X(C).toFixed(1)+'" cy="'+P.yAxis+'" r="'+(R*P.s).toFixed(1)+'" fill="rgba(14,124,107,0.08)" stroke="#0e7c6b" stroke-width="2.2"/>';
     g+='<circle cx="'+X(s3).toFixed(1)+'" cy="'+P.yAxis+'" r="3" fill="#7a5230"/><text x="'+X(s3).toFixed(1)+'" y="'+(P.yAxis+30)+'" text-anchor="middle" font-family="Inter" font-size="11" fill="#7a5230">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
