@@ -115,6 +115,11 @@ footer{max-width:980px;margin:3rem auto 0;padding:2rem 1.5rem 3rem;border-top:1p
 .slip{animation:shearOsc 1.1s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.slip{animation:none}}
 @media(max-width:600px){section{padding:2.4rem 1.1rem .6rem}header.hero{padding:3rem 1.1rem 2rem}nav{padding:0 .9rem;gap:.9rem}.hero-fig{flex-direction:column;align-items:flex-start}}
+/* Magyar tipográfia — kiegyensúlyozott, olvasható tördelés */
+body{text-wrap:pretty}
+p,li,figcaption,blockquote,dd,.lead,.note,.card p,.panel-sub,.hero-sub,.gauge-caption{text-wrap:pretty;hyphens:none}
+h1,h2,h3,h4,.quiz-q,.panel-title{text-wrap:balance}
+.nowrap{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -626,6 +631,34 @@ function arrow(x1,y1,x2,y2,col,w){
   $("qRestart").addEventListener('click',start);
   start();
 })();
+})();
+</script>
+<script>
+/* Magyar tipográfia — automatikus sortörés-szabályok */
+(function(){
+  "use strict";
+  var NBSP=' ', WJ='⁠';
+  function math(s){return s.replace(/ (?=[=+−·×<>])/g,NBSP).replace(/([=+−·×<>]) /g,'$1'+NBSP);}
+  function units(s){return s.replace(/(\d) (?=(?:kPa|MPa|GPa|kN\/m³|kN\/m²|kN|m³|m²|m\/s|cm|mm|km|kg|°C|°|%|m|t|óra|nap|hét|hónap|év)(?:[\s.,;:!?)\]–—]|$))/g,'$1'+NBSP);}
+  function shortWords(s){return s.replace(/(^|[\s(„"'»–—])(a|az|s|e|é|és|is)(?: )(?=\S)/gi,'$1$2'+NBSP);}
+  function dashes(s){return s.replace(/([0-9A-Za-zÀ-ÿ])([-–—])([0-9A-Za-zÀ-ÿ])/g,'$1'+WJ+'$2'+WJ+'$3');}
+  function fix(s){return dashes(units(math(shortWords(s))));}
+  var SKIP={SCRIPT:1,STYLE:1,CODE:1,PRE:1,KBD:1,SAMP:1,INPUT:1,TEXTAREA:1,SELECT:1,OPTION:1,NOSCRIPT:1};
+  function walk(el){
+    for(var n=el.firstChild;n;n=n.nextSibling){
+      if(n.nodeType===3){var t=n.nodeValue;if(t&&/\S/.test(t)){var nt=fix(t);if(nt!==t)n.nodeValue=nt;}}
+      else if(n.nodeType===1){
+        var tag=n.tagName?n.tagName.toUpperCase():'';
+        if(SKIP[tag])continue;
+        if(n.namespaceURI==='http://www.w3.org/2000/svg')continue;
+        if(n.classList&&n.classList.contains('nowrap'))continue;
+        if(n.isContentEditable)continue;
+        walk(n);
+      }
+    }
+  }
+  function run(){if(document.body)walk(document.body);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
 })();
 </script>
 </body>
