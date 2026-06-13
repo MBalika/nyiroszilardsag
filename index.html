@@ -158,7 +158,7 @@ h1,h2,h3,h4,.quiz-q,.panel-title{text-wrap:balance}
     <div class="card"><h4><span class="dot accent"></span>Főfeszültségek σ₁, σ₃</h4><p>Mindig van két egymásra merőleges sík, amelyen a nyírás zérus — ezeken hat a legnagyobb (σ₁) és a legkisebb (σ₃) normálfeszültség. Köztük forog minden más sík.</p></div>
   </div>
   <div class="formula">σ<sub>n</sub> = <span class="f-sig">(σ₁+σ₃)/2</span> + <span class="f-sig">(σ₁−σ₃)/2</span>·cos2θ &nbsp;&nbsp; τ = <span class="f-tau">(σ₁−σ₃)/2</span>·sin2θ
-    <small>A θ síkszöggel a feszültségek <strong>periodikusan</strong> változnak — pont ezt rajzolja ki egy kör a σ–τ síkon. A kör <strong>középpontja</strong> (σ₁+σ₃)/2, a <strong>sugara</strong> (σ₁−σ₃)/2.</small>
+    <small>Az α síkszöggel a feszültségek <strong>periodikusan</strong> változnak — pont ezt rajzolja ki egy kör a σ–τ síkon. A kör <strong>középpontja</strong> (σ₁+σ₃)/2, a <strong>sugara</strong> (σ₁−σ₃)/2.</small>
   </div>
   <div class="note"><strong>A kulcsgondolat:</strong> a teljes feszültségállapotot — végtelen sok sík minden σ–τ párját — egyetlen kör tartalmazza.<br>A&nbsp;talajmechanika fél sikere ennek a körnek a „megértése".</div>
 </section>
@@ -167,7 +167,7 @@ h1,h2,h3,h4,.quiz-q,.panel-title{text-wrap:balance}
 <section id="kor" class="reveal">
   <div class="eyebrow">2 · A kör születése</div>
   <h2>Mohr-kör játszótér</h2>
-  <p class="lead">Állítsd a két <strong>főfeszültséget</strong> (σ₁, σ₃), és forgasd a <strong>vizsgált síkot</strong> (θ). A jobb oldali elemen a sík és a rá ható σ<sub>n</sub>, τ feszültségek; a bal oldali körön a megfelelő <strong>pont</strong> — a kettő együtt mozog.</p>
+  <p class="lead">Állítsd a két <strong>főfeszültséget</strong> (σ₁, σ₃), és forgasd a <strong>vizsgált síkot</strong> (α). A jobb oldali elemen a sík és a rá ható σ<sub>n</sub>, τ feszültségek; a bal oldali körön a megfelelő <strong>pont</strong> — a kettő együtt mozog.</p>
   <div class="panel">
     <div class="panel-title">Élő Mohr-kör</div>
     <div class="panel-sub">A körön a piros pont a kiválasztott sík feszültségállapota. A síkszög θ-ja a körön <strong>2θ</strong>-ként jelenik meg.</div>
@@ -189,7 +189,7 @@ h1,h2,h3,h4,.quiz-q,.panel-title{text-wrap:balance}
       </div>
     </div>
   </div>
-  <div class="note"><strong>Figyeld meg:</strong> ha θ = 0°, a sík a főfeszültség síkja → τ = 0, σ<sub>n</sub> = σ₁. Ha <strong>θ = 45°</strong>, a nyírófeszültség a <strong>legnagyobb</strong> (τ<sub>max</sub> = R) — ez a kör teteje. A talaj mégsem itt törik először, mert a normálfeszültség is számít (lásd a következő részt).</p></div>
+  <div class="note"><strong>Figyeld meg:</strong> ha α = 0°, a sík a főfeszültség síkja → τ = 0, σ<sub>n</sub> = σ₁. Ha <strong>α = 45°</strong>, a nyírófeszültség a <strong>legnagyobb</strong> (τ<sub>max</sub> = R) — ez a kör teteje. A talaj mégsem itt törik először, mert a normálfeszültség is számít (lásd a következő részt).</p></div>
 </section>
 
 <!-- ── 3. TÖRÉS ── -->
@@ -229,7 +229,7 @@ h1,h2,h3,h4,.quiz-q,.panel-title{text-wrap:balance}
       </div>
     </div>
   </div>
-  <div class="note warn"><strong>A törési sík nem 45°-os!</strong> A minta nem a maximális nyírás (45°) síkján törik, hanem ott, ahol a kör érinti az egyenest: <strong>θ<sub>f</sub> = 45° + φ′/2</strong>. Szemcsés talajban (nagy φ′) a törési sík meredekebb.</div>
+  <div class="note warn"><strong>A törési sík nem 45°-os!</strong> A minta nem a maximális nyírás (45°) síkján törik, hanem ott, ahol a kör érinti az egyenest: <strong>α = 45° + φ′/2</strong>. Szemcsés talajban (nagy φ′) a törési sík meredekebb.</div>
 </section>
 
 <!-- ── 4. NYÍRÓSZILÁRDSÁG ── -->
@@ -611,7 +611,7 @@ function arrow(x1,y1,x2,y2,col,w){
   const Q=[
     {q:"Mit ábrázol a Mohr-kör?",o:["A talaj szemeloszlását","Egy pont teljes feszültségállapotát — minden sík σ–τ párját","A süllyedés időbeli alakulását","A pórusvíznyomás eloszlását"],c:1,e:"A Mohr-kör egyetlen pontban az összes lehetséges metszősík normál- és nyírófeszültségét tartalmazza."},
     {q:"Mi a Mohr-kör középpontja és sugara?",o:["Közép σ₁, sugár σ₃","Közép (σ₁+σ₃)/2, sugár (σ₁−σ₃)/2","Közép (σ₁−σ₃)/2, sugár (σ₁+σ₃)/2","Közép σ₃, sugár σ₁"],c:1,e:"Középpont = az átlagos normálfeszültség (σ₁+σ₃)/2, sugár = a maximális nyírófeszültség (σ₁−σ₃)/2."},
-    {q:"Melyik síkon a legnagyobb a nyírófeszültség?",o:["A főfeszültségi síkon (θ=0°)","θ=30°-nál","θ=45°-nál (a kör teteje)","θ=90°-nál"],c:2,e:"τ_max = R a θ=45°-os síkon — ez a kör legmagasabb pontja. De a talaj nem feltétlenül itt törik!"},
+    {q:"Melyik síkon a legnagyobb a nyírófeszültség?",o:["A főfeszültségi síkon (α=0°)","α=30°-nál","α=45°-nál (a kör teteje)","α=90°-nál"],c:2,e:"τ_max = R az α=45°-os síkon — ez a kör legmagasabb pontja. De a talaj nem feltétlenül itt törik!"},
     {q:"A Mohr–Coulomb törési feltétel:",o:["τ_f = c′ + σ′·tanφ′","τ_f = c′ − σ′·tanφ′","σ′ = c′ + τ·tanφ′","τ_f = σ′ / tanφ′"],c:0,e:"A nyírószilárdság a kohézióból (c′) és a normálfeszültséggel arányos súrlódásból (σ′·tanφ′) tevődik össze."},
     {q:"Mikor törik a talaj a Mohr-diagramon?",o:["Amikor a kör középpontja eléri az egyenest","Amikor a kör érinti a burkológörbét","Amikor a kör teljesen az egyenes fölé kerül","Amikor σ₃ = 0"],c:1,e:"A törés az érintés pillanata: ekkor egyetlen síkon a nyírófeszültség épp eléri a szilárdságot."},
     {q:"Mekkora a törési sík szöge a főfeszültség síkjához képest?",o:["45°","45° + φ′/2","φ′","90° − φ′"],c:1,e:"α = 45° + φ′/2. Szemcsés talajban (nagy φ′) a törési sík meredekebb, mint a maximális nyírás 45°-os síkja."},
