@@ -398,16 +398,25 @@ function circleSvg(s1,s3){
     g+='<line x1="'+px.toFixed(1)+'" y1="'+py.toFixed(1)+'" x2="'+PLOT.x0+'" y2="'+py.toFixed(1)+'" stroke="#c2521f" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>';
     g+='<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="5" fill="#c2521f"/>';
     g+='<text x="'+(px+9).toFixed(1)+'" y="'+(py-6).toFixed(1)+'" font-family="Inter" font-size="11" fill="#c2521f">(σ<tspan dy="2.5" font-size="8">n</tspan><tspan dy="-2.5">, τ)</tspan></text>';
-    // α szögív: σ3 PONTBÓL az F ponthoz (az érintő sugárhoz) — nem a középponton!
-    var arcStart_x=SX(s3), arcStart_y=PLOT.yAxis; // σ3 pont az x-tengelyen
-    var arcEnd_x=px, arcEnd_y=py; // az F pont (a körön)
-    // az ív középpontja a σ3 és F közötti szakasz felezőmerőlegesén, a körön
-    var midX=(arcStart_x+arcEnd_x)/2, midY=(arcStart_y+arcEnd_y)/2;
-    var dist=Math.hypot(arcEnd_x-arcStart_x, arcEnd_y-arcStart_y);
-    var arcRad_calc=dist/2; // az ív sugara az egyszerű esetben
-    g+='<path d="M '+arcStart_x.toFixed(1)+' '+arcStart_y.toFixed(1)+' A '+arcRad_calc.toFixed(1)+' '+arcRad_calc.toFixed(1)+' 0 0 1 '+arcEnd_x.toFixed(1)+' '+arcEnd_y.toFixed(1)+'" stroke="#c2521f" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
-    // α felirat a σ3 mellett
-    g+='<text x="'+(SX(s3)-28).toFixed(1)+'" y="'+(PLOT.yAxis-16)+'" font-family="Archivo" font-weight="800" font-size="14" fill="#c2521f">α = '+th+'°</text>';
+    // TÖRÉSI VONAL: σ3 pontból az F ponthoz — ez párhuzamos a mintában rajzolt zöld síkkal!
+    var fracStart_x=SX(s3), fracStart_y=PLOT.yAxis; // σ3 pont
+    var fracEnd_x=px, fracEnd_y=py; // az F pont (a körön)
+    // a vonal meghosszabbítása a diagram széleiig
+    var dx_frac=fracEnd_x-fracStart_x, dy_frac=fracEnd_y-fracStart_y;
+    var len_frac=Math.hypot(dx_frac, dy_frac);
+    var ux_frac=dx_frac/len_frac, uy_frac=dy_frac/len_frac; // egységvektor
+    var extend=300; // meghosszabbítás
+    var fracStart2_x=fracStart_x-ux_frac*extend, fracStart2_y=fracStart_y-uy_frac*extend;
+    var fracEnd2_x=fracEnd_x+ux_frac*extend, fracEnd2_y=fracEnd_y+uy_frac*extend;
+    g+='<line x1="'+fracStart2_x.toFixed(1)+'" y1="'+fracStart2_y.toFixed(1)+'" x2="'+fracEnd2_x.toFixed(1)+'" y2="'+fracEnd2_y.toFixed(1)+'" stroke="#a32626" stroke-width="2" stroke-dasharray="6 4"/>';
+    // α szögjelölés: az egyenes és a vízszintes között
+    var angleRad_frac=18;
+    var angle_rad=Math.atan2(-dy_frac, dx_frac);
+    var arcStart_fx=fracStart_x+angleRad_frac, arcStart_fy=fracStart_y;
+    var arcEnd_fx=fracStart_x+angleRad_frac*Math.cos(angle_rad), arcEnd_fy=fracStart_y-angleRad_frac*Math.sin(angle_rad);
+    g+='<path d="M '+arcStart_fx.toFixed(1)+' '+arcStart_fy.toFixed(1)+' A '+angleRad_frac+' '+angleRad_frac+' 0 0 0 '+arcEnd_fx.toFixed(1)+' '+arcEnd_fy.toFixed(1)+'" stroke="#a32626" stroke-width="2" fill="none"/>';
+    // α felirat
+    g+='<text x="'+(fracStart_x+30).toFixed(1)+'" y="'+(fracStart_y-18)+'" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">α = '+th+'°</text>';
     svg.innerHTML=g;
     // talajelem
     el.innerHTML=elemDraw(th,s1,s3,sn,tau);
