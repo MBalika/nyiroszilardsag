@@ -517,13 +517,15 @@ function arrow(x1,y1,x2,y2,col,w){
     s+=arrow(cx-hw-20,cy,cx-hw-3,cy,'#b08968',2.2)+arrow(cx+hw+20,cy,cx+hw+3,cy,'#b08968',2.2);
     s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="Inter" font-size="10.5" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
     s+='<text x="'+(cx-hw-8)+'" y="'+(cy-6)+'" text-anchor="end" font-family="Inter" font-size="10.5" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
-    s+='<text x="'+(cx-hw+2)+'" y="'+(cy+hh-6)+'" font-family="Inter" font-size="10.5" fill="'+(failed?'#a32626':'#0e7c6b')+'">θ_f='+fmt(thf,0)+'°</text>';
-    /* szögjelölés: ív a bal alsó sarok mellett, amely mutatja θ_f-et az alaphoz (vízszinteshez) képest */
-    var arcRad=22, arcX=cx-hw+14, arcY=cy+hh+8;
-    var endX=arcX+arcRad*Math.cos(a), endY=arcY-arcRad*Math.sin(a);
+    /* szögjelölés: a sík bal végpontjánál (lx1, ly1), nagyobb ív, amely mutatja θ_f-et a vízszinteshez képest */
+    var angleCol=failed?'#a32626':'#0e7c6b';
+    var angleRad=26; // nagyobb ív
+    // a vízszintes irányból (1,0) a sík irányáig (dx, dy) az ív
+    var arcStart_x=lx1+angleRad, arcStart_y=ly1;
+    var arcEnd_x=lx1+angleRad*dx, arcEnd_y=ly1-angleRad*dy;
     var largeArc=thf>90?1:0;
-    s+='<path d="M '+(arcX+arcRad)+' '+arcY+' A '+arcRad+' '+arcRad+' 0 '+largeArc+' 0 '+endX.toFixed(1)+' '+endY.toFixed(1)+'" stroke="'+(failed?'#a32626':'#0e7c6b')+'" stroke-width="1.8" fill="none"/>';
-    s+='<text x="'+(arcX+arcRad+16)+'" y="'+(arcY+2)+'" font-family="Inter" font-size="11" fill="'+(failed?'#a32626':'#0e7c6b')+'">θ_f</text>';
+    s+='<path d="M '+arcStart_x.toFixed(1)+' '+arcStart_y.toFixed(1)+' A '+angleRad+' '+angleRad+' 0 '+largeArc+' 0 '+arcEnd_x.toFixed(1)+' '+arcEnd_y.toFixed(1)+'" stroke="'+angleCol+'" stroke-width="2.2" fill="none"/>';
+    s+='<text x="'+(lx1+angleRad+12).toFixed(1)+'" y="'+(ly1+4)+'" font-family="Archivo" font-weight="700" font-size="12" fill="'+angleCol+'">θ<tspan dy="2.5" font-size="9">f</tspan>='+fmt(thf,0)+'°</text>';
     if(failed){s+='<text x="'+cx+'" y="'+(cy-hh-28)+'" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">TÖRÉS</text>';}
     return s;
   }
