@@ -398,12 +398,16 @@ function circleSvg(s1,s3){
     g+='<line x1="'+px.toFixed(1)+'" y1="'+py.toFixed(1)+'" x2="'+PLOT.x0+'" y2="'+py.toFixed(1)+'" stroke="#c2521f" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>';
     g+='<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="5" fill="#c2521f"/>';
     g+='<text x="'+(px+9).toFixed(1)+'" y="'+(py-6).toFixed(1)+'" font-family="Inter" font-size="11" fill="#c2521f">(σ<tspan dy="2.5" font-size="8">n</tspan><tspan dy="-2.5">, τ)</tspan></text>';
-    // 2θ szögív (a körön, a kör középpontja körül)
-    var arcRad=20, arcEnd_x=SX(C)+arcRad*Math.cos(rad(2*th)), arcEnd_y=PLOT.yAxis-arcRad*Math.sin(rad(2*th));
-    var largeArc=2*th>90?1:0;
-    g+='<path d="M '+(SX(C)+arcRad)+' '+PLOT.yAxis+' A '+arcRad+' '+arcRad+' 0 '+largeArc+' 0 '+arcEnd_x.toFixed(1)+' '+arcEnd_y.toFixed(1)+'" stroke="#c2521f" stroke-width="1.8" fill="none"/>';
-    // 2θ felirat
-    g+='<text x="'+(SX(C)+28).toFixed(1)+'" y="'+(PLOT.yAxis-6)+'" font-family="Inter" font-size="11" fill="#c2521f"><tspan font-weight="700">α</tspan> = '+(th)+'°</text>';
+    // α szögív: σ3 PONTBÓL az F ponthoz (az érintő sugárhoz) — nem a középponton!
+    var arcStart_x=SX(s3), arcStart_y=PLOT.yAxis; // σ3 pont az x-tengelyen
+    var arcEnd_x=px, arcEnd_y=py; // az F pont (a körön)
+    // az ív középpontja a σ3 és F közötti szakasz felezőmerőlegesén, a körön
+    var midX=(arcStart_x+arcEnd_x)/2, midY=(arcStart_y+arcEnd_y)/2;
+    var dist=Math.hypot(arcEnd_x-arcStart_x, arcEnd_y-arcStart_y);
+    var arcRad_calc=dist/2; // az ív sugara az egyszerű esetben
+    g+='<path d="M '+arcStart_x.toFixed(1)+' '+arcStart_y.toFixed(1)+' A '+arcRad_calc.toFixed(1)+' '+arcRad_calc.toFixed(1)+' 0 0 1 '+arcEnd_x.toFixed(1)+' '+arcEnd_y.toFixed(1)+'" stroke="#c2521f" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+    // α felirat a σ3 mellett
+    g+='<text x="'+(SX(s3)-28).toFixed(1)+'" y="'+(PLOT.yAxis-16)+'" font-family="Archivo" font-weight="800" font-size="14" fill="#c2521f">α = '+th+'°</text>';
     svg.innerHTML=g;
     // talajelem
     el.innerHTML=elemDraw(th,s1,s3,sn,tau);
