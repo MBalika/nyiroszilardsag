@@ -174,7 +174,7 @@ h1,h2,h3,h4,.quiz-q,.panel-title{text-wrap:balance}
     <div class="controls">
       <div class="ctrl"><label>σ₁ — nagyobb főfeszültség <span class="val" id="k_s1v">240 kPa</span></label><input type="range" id="k_s1" min="40" max="400" step="5" value="240"></div>
       <div class="ctrl"><label>σ₃ — kisebb főfeszültség <span class="val" id="k_s3v">80 kPa</span></label><input type="range" id="k_s3" min="0" max="400" step="5" value="80"></div>
-      <div class="ctrl"><label>θ<sub>f</sub> — <strong>törési</strong> sík szöge <span class="val" id="k_thv">30°</span></label><input type="range" id="k_th" min="0" max="90" step="1" value="30"></div>
+      <div class="ctrl"><label>α — <strong>törési</strong> szög <span class="val" id="k_thv">30°</span></label><input type="range" id="k_th" min="0" max="90" step="1" value="30"></div>
     </div>
     <div class="split">
       <div class="svg-wrap"><svg id="korSvg" viewBox="0 0 440 380" role="img" aria-label="Mohr-kör a σ-τ síkon"></svg></div>
@@ -403,7 +403,7 @@ function circleSvg(s1,s3){
     var largeArc=2*th>90?1:0;
     g+='<path d="M '+(SX(C)+arcRad)+' '+PLOT.yAxis+' A '+arcRad+' '+arcRad+' 0 '+largeArc+' 0 '+arcEnd_x.toFixed(1)+' '+arcEnd_y.toFixed(1)+'" stroke="#c2521f" stroke-width="1.8" fill="none"/>';
     // 2θ felirat
-    g+='<text x="'+(SX(C)+28).toFixed(1)+'" y="'+(PLOT.yAxis-6)+'" font-family="Inter" font-size="11" fill="#c2521f"><tspan font-weight="700">2θ</tspan>_f='+(2*th)+'°</text>';
+    g+='<text x="'+(SX(C)+28).toFixed(1)+'" y="'+(PLOT.yAxis-6)+'" font-family="Inter" font-size="11" fill="#c2521f"><tspan font-weight="700">α</tspan> = '+(th)+'°</text>';
     svg.innerHTML=g;
     // talajelem
     el.innerHTML=elemDraw(th,s1,s3,sn,tau);
@@ -527,7 +527,7 @@ function arrow(x1,y1,x2,y2,col,w){
     var arcEnd_x=arcCx+angleRad*dx, arcEnd_y=arcCy-angleRad*dy; // sík iránya
     var largeArc=thf>90?1:0;
     s+='<path d="M '+arcStart_x.toFixed(1)+' '+arcStart_y.toFixed(1)+' A '+angleRad+' '+angleRad+' 0 '+largeArc+' 0 '+arcEnd_x.toFixed(1)+' '+arcEnd_y.toFixed(1)+'" stroke="'+angleCol+'" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
-    s+='<text x="'+(arcCx+angleRad+14).toFixed(1)+'" y="'+(arcCy-14)+'" font-family="Archivo" font-weight="700" font-size="14" fill="'+angleCol+'">θ<tspan dy="3" font-size="10">f</tspan>='+fmt(thf,0)+'°</text>';
+    s+='<text x="'+(arcCx+angleRad+14).toFixed(1)+'" y="'+(arcCy-14)+'" font-family="Archivo" font-weight="700" font-size="14" fill="'+angleCol+'">α ='+fmt(thf,0)+'°</text>';
     if(failed){s+='<text x="'+cx+'" y="'+(cy-hh-28)+'" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">TÖRÉS</text>';}
     return s;
   }
@@ -601,7 +601,7 @@ function arrow(x1,y1,x2,y2,col,w){
     {q:"Melyik síkon a legnagyobb a nyírófeszültség?",o:["A főfeszültségi síkon (θ=0°)","θ=30°-nál","θ=45°-nál (a kör teteje)","θ=90°-nál"],c:2,e:"τ_max = R a θ=45°-os síkon — ez a kör legmagasabb pontja. De a talaj nem feltétlenül itt törik!"},
     {q:"A Mohr–Coulomb törési feltétel:",o:["τ_f = c′ + σ′·tanφ′","τ_f = c′ − σ′·tanφ′","σ′ = c′ + τ·tanφ′","τ_f = σ′ / tanφ′"],c:0,e:"A nyírószilárdság a kohézióból (c′) és a normálfeszültséggel arányos súrlódásból (σ′·tanφ′) tevődik össze."},
     {q:"Mikor törik a talaj a Mohr-diagramon?",o:["Amikor a kör középpontja eléri az egyenest","Amikor a kör érinti a burkológörbét","Amikor a kör teljesen az egyenes fölé kerül","Amikor σ₃ = 0"],c:1,e:"A törés az érintés pillanata: ekkor egyetlen síkon a nyírófeszültség épp eléri a szilárdságot."},
-    {q:"Mekkora a törési sík szöge a főfeszültség síkjához képest?",o:["45°","45° + φ′/2","φ′","90° − φ′"],c:1,e:"θ_f = 45° + φ′/2. Szemcsés talajban (nagy φ′) a törési sík meredekebb, mint a maximális nyírás 45°-os síkja."},
+    {q:"Mekkora a törési sík szöge a főfeszültség síkjához képest?",o:["45°","45° + φ′/2","φ′","90° − φ′"],c:1,e:"α = 45° + φ′/2. Szemcsés talajban (nagy φ′) a törési sík meredekebb, mint a maximális nyírás 45°-os síkja."},
     {q:"Tisztán szemcsés talaj (homok) burkológörbéje:",o:["Vízszintes egyenes","Az origóból induló ferde egyenes (c′=0)","Függőleges egyenes","Görbe vonal"],c:1,e:"Homokban c′≈0, így a burkológörbe az origóból indul: τ_f = σ′·tanφ′."},
     {q:"Drénezetlen telített agyag burkológörbéje a teljes feszültségek terében:",o:["Meredek ferde egyenes","Vízszintes egyenes τ = c_u (φ=0)","Az origóból indul","Negatív meredekségű"],c:1,e:"Drénezetlen esetben φ=0, a szilárdság a cellanyomástól függetlenül állandó c_u — a burok vízszintes."},
     {q:"Miért φ=0 a drénezetlen telített agyag?",o:["Mert nincs súrlódás a szemcsék közt","Mert a cellanyomás-növekmény a pórusvízre megy, a hatékony feszültség nem változik","Mert az agyag nem visel nyírást","Mert c_u nagyon nagy"],c:1,e:"Telített, zárt rendszerben Δσ teljes egészében Δu lesz, így σ′ és a deviátorfeszültség a cellanyomástól független — a kör mérete állandó."},
@@ -643,7 +643,7 @@ function arrow(x1,y1,x2,y2,col,w){
       const r=score/Q.length;
       $("qMsg").textContent=r>=0.9?"Kiváló! A Mohr-kör és a törési feltétel a kisujjadban van.":
         r>=0.7?"Szép munka! Egy-két részlet még csiszolható — játssz a törés-szimulátorral.":
-        r>=0.5?"Jó alap, de érdemes újra végigvinni a törési burkológörbe és a θ_f = 45°+φ′/2 részt.":
+        r>=0.5?"Jó alap, de érdemes újra végigvinni a törési burkológörbét és az α = 45°+φ′/2 részt.":
         "Ne csüggedj — görgess vissza az alapokhoz, és próbáld újra!";
     }
   });
