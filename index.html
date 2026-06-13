@@ -433,10 +433,10 @@ function circleSvg(s1,s3){
     // σn (normális mentén) és τ (sík mentén) nyilak a sík közepén
     const ns=20*Math.min(1.2,sn/Math.max(s1,1))+8, ts=20*Math.min(1.2,Math.abs(tau)/Math.max((s1-s3)/2,1))+4;
     s+=arrow(cx+nx*8,cy+ny*8,cx+nx*(8+ns),cy+ny*(8+ns),'#c2521f',2.2);
-    s+='<text x="'+(cx+nx*(14+ns)).toFixed(1)+'" y="'+(cy+ny*(14+ns)).toFixed(1)+'" font-family="Inter" font-size="10.5" fill="#c2521f">σ<tspan dy="2.5" font-size="8">n</tspan></text>';
+    s+='<text x="'+(cx+nx*(14+ns)+6).toFixed(1)+'" y="'+(cy+ny*(14+ns)).toFixed(1)+'" font-family="Inter" font-size="10.5" fill="#c2521f">σ<tspan dy="2.5" font-size="8">n</tspan></text>';
     const tsign=tau>=0?1:-1;
     s+=arrow(cx,cy,cx+dx*ts*tsign,cy+dy*ts*tsign,'#0e7c6b',2.2);
-    s+='<text x="'+(cx+dx*(ts+10)*tsign).toFixed(1)+'" y="'+(cy+dy*(ts+10)*tsign).toFixed(1)+'" font-family="Inter" font-size="10.5" fill="#0e7c6b">τ</text>';
+    s+='<text x="'+(cx+dx*(ts+8)*tsign+nx*14).toFixed(1)+'" y="'+(cy+dy*(ts+8)*tsign+ny*14).toFixed(1)+'" font-family="Inter" font-size="10.5" fill="#0e7c6b">τ</text>';
     return s;
   }
   ["k_s1","k_s3","k_th"].forEach(id=>$(id).addEventListener('input',draw));
