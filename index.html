@@ -415,8 +415,8 @@ function circleSvg(s1,s3){
     var arcStart_fx=fracStart_x+angleRad_frac, arcStart_fy=fracStart_y;
     var arcEnd_fx=fracStart_x+angleRad_frac*Math.cos(angle_rad), arcEnd_fy=fracStart_y-angleRad_frac*Math.sin(angle_rad);
     g+='<path d="M '+arcStart_fx.toFixed(1)+' '+arcStart_fy.toFixed(1)+' A '+angleRad_frac+' '+angleRad_frac+' 0 0 0 '+arcEnd_fx.toFixed(1)+' '+arcEnd_fy.toFixed(1)+'" stroke="#a32626" stroke-width="2" fill="none"/>';
-    // α felirat
-    g+='<text x="'+(fracStart_x+30).toFixed(1)+'" y="'+(fracStart_y-18)+'" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">α = '+th+'°</text>';
+    // α felirat — a σ3 pont alatt, szövetből kimaradva
+    g+='<text x="'+(fracStart_x-32).toFixed(1)+'" y="'+(fracStart_y+20)+'" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">α = '+th+'°</text>';
     svg.innerHTML=g;
     // talajelem
     el.innerHTML=elemDraw(th,s1,s3,sn,tau);
