@@ -405,7 +405,7 @@ function circleSvg(s1,s3){
     var dx_frac=fracEnd_x-fracStart_x, dy_frac=fracEnd_y-fracStart_y;
     var len_frac=Math.hypot(dx_frac, dy_frac);
     var ux_frac=dx_frac/len_frac, uy_frac=dy_frac/len_frac; // egységvektor
-    var extend=300; // meghosszabbítás
+    var extend=45; // meghosszabbítás — csak kicsit nyúl túl esztétikusan
     var fracStart2_x=fracStart_x-ux_frac*extend, fracStart2_y=fracStart_y-uy_frac*extend;
     var fracEnd2_x=fracEnd_x+ux_frac*extend, fracEnd2_y=fracEnd_y+uy_frac*extend;
     g+='<line x1="'+fracStart2_x.toFixed(1)+'" y1="'+fracStart2_y.toFixed(1)+'" x2="'+fracEnd2_x.toFixed(1)+'" y2="'+fracEnd2_y.toFixed(1)+'" stroke="#a32626" stroke-width="2" stroke-dasharray="6 4"/>';
