@@ -517,18 +517,17 @@ function arrow(x1,y1,x2,y2,col,w){
     s+=arrow(cx-hw-20,cy,cx-hw-3,cy,'#b08968',2.2)+arrow(cx+hw+20,cy,cx+hw+3,cy,'#b08968',2.2);
     s+='<text x="'+(cx+hw+6)+'" y="'+(cy-6)+'" font-family="Inter" font-size="10.5" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
     s+='<text x="'+(cx-hw-8)+'" y="'+(cy-6)+'" text-anchor="end" font-family="Inter" font-size="10.5" fill="#b08968">σ<tspan dy="2.5" font-size="8">3</tspan></text>';
-    /* szögjelölés: ahol a sík a minta bal szélét metszi, ott az ív a függőlegesből (σ1) a síkig */
+    /* szögjelölés: a zöld sík és a VÍZSZINTES között — a sík felső része közelében */
     var angleCol=failed?'#a32626':'#0e7c6b';
-    var angleRad=24;
-    // a sík metszéspontja a minta bal szélével (x = cx-hw)
-    var t=Math.abs(dx)>1e-6 ? -hw/dx : 0;
-    var arcCx=cx-hw, arcCy=cy+t*dy;
-    // ív a függőlegesből (0,-1) a sík irányáig (dx,dy), az arcCx,arcCy körül
-    var arcStart_x=arcCx, arcStart_y=arcCy-angleRad; // függőleges le
+    var angleRad=28;
+    // a sík felső része (jobb vége) közelében helyezzük az ív középpontját
+    var arcCx=lx2-8, arcCy=ly2+4; // a sík jobb-felső része körül
+    // ív a vízszintesből (1,0) a sík irányáig (dx,dy)
+    var arcStart_x=arcCx+angleRad, arcStart_y=arcCy; // jobbra (vízszintes)
     var arcEnd_x=arcCx+angleRad*dx, arcEnd_y=arcCy-angleRad*dy; // sík iránya
     var largeArc=thf>90?1:0;
-    s+='<path d="M '+arcStart_x.toFixed(1)+' '+arcStart_y.toFixed(1)+' A '+angleRad+' '+angleRad+' 0 '+largeArc+' 0 '+arcEnd_x.toFixed(1)+' '+arcEnd_y.toFixed(1)+'" stroke="'+angleCol+'" stroke-width="2.4" fill="none"/>';
-    s+='<text x="'+(arcCx-angleRad-18).toFixed(1)+'" y="'+(arcCy-angleRad-8)+'" font-family="Archivo" font-weight="700" font-size="13" fill="'+angleCol+'">θ<tspan dy="2.5" font-size="10">f</tspan></text>';
+    s+='<path d="M '+arcStart_x.toFixed(1)+' '+arcStart_y.toFixed(1)+' A '+angleRad+' '+angleRad+' 0 '+largeArc+' 0 '+arcEnd_x.toFixed(1)+' '+arcEnd_y.toFixed(1)+'" stroke="'+angleCol+'" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+    s+='<text x="'+(arcCx+angleRad+14).toFixed(1)+'" y="'+(arcCy-14)+'" font-family="Archivo" font-weight="700" font-size="14" fill="'+angleCol+'">θ<tspan dy="3" font-size="10">f</tspan>='+fmt(thf,0)+'°</text>';
     if(failed){s+='<text x="'+cx+'" y="'+(cy-hh-28)+'" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="13" fill="#a32626">TÖRÉS</text>';}
     return s;
   }
