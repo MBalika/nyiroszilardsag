@@ -415,10 +415,9 @@ function circleSvg(s1,s3){
     var arcStart_fx=fracStart_x+angleRad_frac, arcStart_fy=fracStart_y;
     var arcEnd_fx=fracStart_x+angleRad_frac*Math.cos(angle_rad), arcEnd_fy=fracStart_y-angleRad_frac*Math.sin(angle_rad);
     g+='<path d="M '+arcStart_fx.toFixed(1)+' '+arcStart_fy.toFixed(1)+' A '+angleRad_frac+' '+angleRad_frac+' 0 0 0 '+arcEnd_fx.toFixed(1)+' '+arcEnd_fy.toFixed(1)+'" stroke="#a32626" stroke-width="2" fill="none"/>';
-    // α felirat — az ív mellett, körön belül, ne lógjon rá vonalra
-    var labelDist=angleRad_frac+24; // az ív után, körön belül
-    var labelAngle_rad=-angle_rad/2; // az ív felezőpontja felé
-    g+='<text x="'+(fracStart_x+labelDist*Math.cos(labelAngle_rad)).toFixed(1)+'" y="'+(fracStart_y-labelDist*Math.sin(labelAngle_rad))+'" font-family="Archivo" font-weight="700" font-size="12" fill="#a32626">α = '+th+'°</text>';
+    // α felirat — az ív végénél, közvetlenül a szögjelölés mellett
+    var labelOffset=14; // az ív vége után
+    g+='<text x="'+(arcEnd_fx+labelOffset*Math.cos(angle_rad)).toFixed(1)+'" y="'+(arcEnd_fy-labelOffset*Math.sin(angle_rad))+'" font-family="Archivo" font-weight="700" font-size="12" fill="#a32626">α = '+th+'°</text>';
     svg.innerHTML=g;
     // talajelem
     el.innerHTML=elemDraw(th,s1,s3,sn,tau);
